@@ -5,6 +5,7 @@ import { ContentList } from "@/components/ContentList";
 import { CourseDetail } from "@/components/CourseDetail";
 import CourseLayout from "@/components/CourseLayout";
 import CustomButton from "@/components/CustomButton";
+import Payment from "@/components/Payment";
 import { useCourse } from "@/core/store/course";
 
 const CourseView = () => {
@@ -38,10 +39,7 @@ const CourseView = () => {
             ListHeaderComponent={<CourseDetail course={course} />}
             onPress="CourseDetail"
           />
-          <CustomButton
-            title="Buy Now"
-            className="mt-5 mx-2 absolute bottom-14 h-[60px]"
-          />
+          <Payment courseid={course.id} price={course.price} />
         </CourseLayout>
       ) : (
         <View className="w-full h-full flex flex-row justify-center items-center bg-white">
