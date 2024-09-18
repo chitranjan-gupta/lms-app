@@ -3,8 +3,10 @@ import { useCallback, useEffect } from "react";
 
 import { useAuth } from "@/core/auth";
 import { STATUS, useFirstTime } from "@/core/store/use-first";
+import { useUser } from "@/core/store/user";
 
 const Layout = () => {
+  const getUser = useUser((state) => state.getUser);
   const authStatus = useAuth((state) => state.status);
   const isFirstTime = useFirstTime((state) => state.status);
 
@@ -19,6 +21,12 @@ const Layout = () => {
       }, 1000);
     }
   }, [hideSplash, authStatus]);
+
+  useEffect(() => {
+    if (authStatus === "signIn") {
+      getUser();
+    }
+  }, [authStatus, getUser]);
 
   if (isFirstTime === STATUS.yes) {
     return <Redirect href="/(unauth)/onboarding" />;

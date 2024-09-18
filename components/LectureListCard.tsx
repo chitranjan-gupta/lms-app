@@ -1,34 +1,37 @@
-// import AntDesign from "@expo/vector-icons/AntDesign";
-// import Entypo from "@expo/vector-icons/Entypo";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
 import { router } from "expo-router";
 import { Pressable, View, Text } from "react-native";
 
 import { setChapter } from "@/core/store/chapter";
-import { setLecture } from "@/core/store/lecture";
+import { setLecture, useLecture } from "@/core/store/lecture";
 import { Lecture } from "@/types/type";
 
 export const LectureListCard = ({
   item,
   onPress,
+  isPurchased,
 }: {
   item: Lecture;
   onPress: string;
+  isPurchased: string;
 }) => {
+  const currentPlaying = useLecture((store) => store.lectureid);
   return (
     <View className="w-full ml-2 h-[60px]">
       <Pressable
         onPress={
           onPress === "CourseDetail"
             ? () => {
-                if (item.isFree) {
+                if (item.isFree || isPurchased === item.courseId) {
                   setChapter(item.chapterId);
                   setLecture(item.id);
                   router.push(`/(auth)/(courses)/(lectures)`);
                 }
               }
             : () => {
-                if (item.isFree) {
+                if (item.isFree || isPurchased === item.courseId) {
                   setChapter(item.chapterId);
                   setLecture(item.id);
                 }
@@ -58,14 +61,30 @@ export const LectureListCard = ({
             </View>
           </View>
           <View
-            className={`mr-2 ${item.isFree ? "bg-blue-500" : "bg-blue-100"} rounded-full w-[50px] h-[50px] flex flex-row items-center justify-center`}
+            className={`mr-2 ${item.isFree || isPurchased === item.courseId ? "bg-blue-500" : "bg-blue-100"} rounded-full w-[50px] h-[50px] flex flex-row items-center justify-center`}
           >
-            {/* <Entypo name="controller-play" size={24} color="white" /> */}
-            {/* <AntDesign name="pause" size={24} color="white" /> */}
-            {item.isFree ? (
+            {isPurchased === item.courseId && currentPlaying !== item.id ? (
+              <Entypo name="controller-play" size={24} color="white" />
+            ) : (
+              <></>
+            )}
+
+            {isPurchased === item.courseId && currentPlaying === item.id ? (
+              <AntDesign name="pause" size={24} color="white" />
+            ) : (
+              <></>
+            )}
+
+            {item.isFree && isPurchased !== item.courseId ? (
               <Feather name="unlock" size={24} color="white" />
             ) : (
+              <></>
+            )}
+
+            {!item.isFree && isPurchased !== item.courseId ? (
               <Feather name="lock" size={24} color="white" />
+            ) : (
+              <></>
             )}
           </View>
         </View>

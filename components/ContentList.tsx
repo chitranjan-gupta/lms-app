@@ -1,10 +1,12 @@
+import { useMemo } from "react";
 import { SectionList } from "react-native";
 
 import { ChapterListCard } from "@/components/ChapterListCard";
 import { LectureListCard } from "@/components/LectureListCard";
-import { useMemo } from "react";
-import type { ComponentType, JSXElementConstructor, ReactElement } from "react";
 import { useCourse } from "@/core/store/course";
+import { useUser } from "@/core/store/user";
+
+import type { ComponentType, JSXElementConstructor, ReactElement } from "react";
 
 interface ContentListProps {
   ListHeaderComponent:
@@ -20,11 +22,17 @@ export const ContentList = ({
   onPress,
 }: ContentListProps) => {
   const course = useCourse((state) => state.course);
+  const isPurchased = useUser((state) => state.isPurchased);
+
   const sections = useMemo(() => {
-    return course?.chapters.map((chapter) => {
-      return { ...chapter, data: chapter.lectures };
-    });
-  }, [course?.chapters!]);
+    if (course?.chapters) {
+      return course.chapters.map((chapter) => ({
+        ...chapter,
+        data: chapter.lectures,
+      }));
+    }
+    return [];
+  }, [course]);
 
   return (
     <SectionList
@@ -34,7 +42,11 @@ export const ContentList = ({
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => (
-        <LectureListCard item={item} onPress={onPress} />
+        <LectureListCard
+          item={item}
+          onPress={onPress}
+          isPurchased={isPurchased}
+        />
       )}
       renderSectionHeader={({ section: { title, duration, lectures } }) => (
         <ChapterListCard

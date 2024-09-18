@@ -2,7 +2,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Slider from "@react-native-community/slider";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -24,14 +24,19 @@ const Courses = () => {
   const categories = useCategories((state) => state.categories);
   const isPending = useCategories((state) => state.status);
   const [priceSlider, setPriceSlider] = useState<number>(90);
-  const [durations, setDurations] = useState([
-    "3-8 Hours",
-    "8-14 Hours",
-    "14-20 Hours",
-    "20-24 Hours",
-    "24-30 Hours",
-  ]);
+  const [durations, setDurations] = useState<string[]>([]);
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    setDurations([
+      "3-8 Hours",
+      "8-14 Hours",
+      "14-20 Hours",
+      "20-24 Hours",
+      "24-30 Hours",
+    ]);
+  }, [setDurations]);
+
   const handleClosePress = () => bottomSheetRef.current?.close();
   const handleOpenPress = () => bottomSheetRef.current?.expand();
   const snapPoints = ["50%", "70%"];

@@ -7,13 +7,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Categories } from "@/components/Categories";
 import { Courses, RecentCourses } from "@/components/Courses";
 import { icons } from "@/constants";
-import { useAuth } from "@/core/auth";
+import { useAuth, signOut } from "@/core/auth";
 import { useCategories } from "@/core/store/categories";
 import { useCourses } from "@/core/store/courses";
 import { removeUser } from "@/core/store/user";
 
 const Home = () => {
-  const signOut = useAuth((state) => state.signOut);
   const isloading = useAuth((state) => state.isloading);
   const loading = useCourses((state) => state.status);
   const courses = useCourses((state) => state.courses);
@@ -22,15 +21,15 @@ const Home = () => {
   const categories = useCategories((state) => state.categories);
   const getCategories = useCategories((state) => state.getCategories);
 
-  const handleSignOut = () => {
-    removeUser();
-    signOut();
-  };
-
   useEffect(() => {
     getCourses();
     getCategories();
   }, [getCategories, getCourses]);
+
+  const handleSignOut = async () => {
+    removeUser();
+    await signOut();
+  };
 
   return (
     <View className="bg-white w-full h-full">

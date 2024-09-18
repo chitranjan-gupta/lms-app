@@ -64,7 +64,7 @@ const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
           }
         },
       },
-      returnURL: "myapp://home",
+      returnURL: "shikshasetu://home",
     });
 
     if (!error) {
@@ -74,7 +74,11 @@ const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
 
   return (
     <>
-      <CustomButton title="Buy Now" className="" onPress={openPaymentSheet} />
+      <CustomButton
+        title="Buy Now"
+        className="absolute mx-2 bottom-[60px]"
+        onPress={openPaymentSheet}
+      />
 
       <ReactNativeModal
         isVisible={success}

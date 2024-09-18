@@ -65,8 +65,8 @@ export const useAuth = create<AuthState>()(
         set({ isloading: true });
         const response = await client.get(`user/logout`);
         if (response.status === 200) {
-          set((state) => ({ status: "signOut", token: null }));
           await removeItem(TOKEN);
+          set((state) => ({ status: "signOut", token: null }));
         }
       } catch (e) {
         console.log(e);

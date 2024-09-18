@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useRef, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +19,7 @@ const Onboarding = () => {
 
   return (
     <View className="w-full h-full bg-white">
+      <StatusBar style="light" />
       <SafeAreaView className="flex h-full items-center justify-between bg-white">
         <TouchableOpacity
           onPress={async () => {

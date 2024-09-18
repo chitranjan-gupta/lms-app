@@ -12,7 +12,8 @@ const Profile = () => {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [getUser]);
+
   return (
     <SafeAreaView className="bg-white w-full h-full">
       <ScrollView

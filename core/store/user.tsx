@@ -18,8 +18,10 @@ interface UserState {
   status: "idle" | "pending";
   error: string | null;
   user: User | null;
+  isPurchased: string;
   setUser: (data: SignUpState) => Promise<void>;
   getUser: () => Promise<void>;
+  getPurchase: (courseid: string) => Promise<void>;
   removeUser: () => void;
   hydrate: () => void;
 }
@@ -27,6 +29,7 @@ interface UserState {
 export const useUser = create<UserState>()(
   devtools((set, get) => ({
     status: "idle",
+    isPurchased: "",
     error: null,
     user: null,
     setUser: async (data: SignUpState) => {
@@ -54,6 +57,22 @@ export const useUser = create<UserState>()(
         console.log(e);
       } finally {
         set({ status: "idle" });
+      }
+    },
+    getPurchase: async (courseid) => {
+      try {
+        const response = await client.post(`purchases`, {
+          userId: (get().user! as any).userId,
+          courseId: courseid,
+        });
+        if (response.status === 200) {
+          if (response.data.courseId === courseid) {
+            set({ status: "idle", isPurchased: response.data.courseId });
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
       }
     },
     removeUser: () => {

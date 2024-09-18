@@ -7,8 +7,10 @@ import { LectureVideo } from "@/components/LectureVideo";
 import { useChapter } from "@/core/store/chapter";
 import { useCourse } from "@/core/store/course";
 import { useLecture } from "@/core/store/lecture";
+import { useUser } from "@/core/store/user";
 
 const LectureView = () => {
+  const user = useUser((state) => state.user);
   const courseid = useCourse((state) => state.courseid);
   const chapterid = useChapter((state) => state.chapterid);
   const status = useLecture((state) => state.status);
@@ -22,10 +24,10 @@ const LectureView = () => {
         chapterId: chapterid,
         courseId: courseid,
         purchase: true,
-        userId: "",
+        userId: user?.userId,
       });
     }
-  }, [lectureid, chapterid, courseid, getLecture]);
+  }, [lectureid, chapterid, courseid, user, getLecture]);
 
   return (
     <>

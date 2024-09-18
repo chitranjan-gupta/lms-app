@@ -96,7 +96,8 @@ export const data = {
   onboarding,
 };
 
-export const BASE_URL = "https://lms-hptc.onrender.com/api";
+export const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 export const muxStreamBaseUrl = "https://stream.mux.com";
 export const videoExtension = "m3u8";
-export const STRIPE_PUBLISHABLE_KEY = "";
+export const STRIPE_PUBLISHABLE_KEY =
+  process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY;
