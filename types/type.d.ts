@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { TextInputProps, TouchableOpacityProps } from "react-native";
 
 declare interface TokenType {
@@ -6,13 +7,14 @@ declare interface TokenType {
 }
 
 declare interface ButtonProps extends TouchableOpacityProps {
-  title: string;
+  title?: string;
   bgVariant?: "primary" | "secondary" | "danger" | "outline" | "success";
   textVariant?: "primary" | "default" | "secondary" | "danger" | "success";
   IconLeft?: React.ComponentType<any>;
   IconRight?: React.ComponentType<any>;
   className?: string;
   isLoading?: boolean;
+  children?: ReactNode;
 }
 
 declare interface InputFieldProps extends TextInputProps {
@@ -172,4 +174,67 @@ declare interface StripeCustomer {
   stripeCustomerId: string;
   created_at: string;
   updated_at: string;
+}
+
+declare interface Company {
+  $id: string;
+  name: string;
+  industry: string;
+  location: string;
+  website_url: string;
+  logo_url?: string;
+  description?: string;
+  jobs: Job[];
+  $createdAt: string;
+  $updatedAt: string;
+}
+
+declare enum JOB_TYPE {
+  FULL_TIME = "Full-Time",
+  PART_TIME = "Part-Time",
+  CONTRACT = "Contract",
+  INTERNSHIP = "Internship",
+  TEMPORARY = "Temporary",
+}
+
+declare enum SECTOR_TYPE {
+  PUBLIC = "Public",
+  PRIVATE = "Private",
+}
+
+declare enum WORK_MODE {
+  FLEXIBLE = "Flexible",
+  REMOTE = "Remote",
+  ONSITE = "Onsite",
+}
+
+declare interface Job {
+  $id: string;
+  title: string;
+  location: string;
+  job_url: string;
+  description?: string;
+  salary_range?: string;
+  application_deadline: string;
+  job_type: JOB_TYPE;
+  sector_type: SECTOR_TYPE;
+  company: Company;
+  $createdAt: string;
+  $updatedAt: string;
+}
+
+declare interface Kanban_Column {
+  $id: string;
+  name: string;
+  index: number;
+  kanbanRow: Kanban_Row[];
+}
+
+declare interface Kanban_Row {
+  $id: string;
+  kanbanColumn: Kanban_Column;
+  title: string;
+  subtitle: string;
+  index: number;
+  notes?: string;
 }

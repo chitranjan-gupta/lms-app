@@ -2,9 +2,11 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { ReactNode } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { icons, STRIPE_PUBLISHABLE_KEY } from "@/constants";
 
 const CourseLayout = ({
@@ -15,35 +17,55 @@ const CourseLayout = ({
   children: ReactNode;
 }) => {
   return (
-    <View className="bg-white w-full h-full">
+    <ThemedView
+      className="w-full h-full"
+      lightColor="transparent"
+      darkColor="transparent"
+    >
       <StripeProvider
-        publishableKey={STRIPE_PUBLISHABLE_KEY}
+        publishableKey={STRIPE_PUBLISHABLE_KEY!}
         merchantIdentifier="merchant.com.shikshasetu"
         urlScheme="myapp"
       >
         <SafeAreaView className="w-full h-full">
-          <View className="flex flex-col w-full h-full bg-white justify-start">
-            <View className="flex flex-row w-full h-[40px] items-center justify-start mx-2 mt-2">
+          <ThemedView
+            className="flex flex-col w-full h-full justify-start"
+            lightColor="transparent"
+            darkColor="transparent"
+          >
+            <ThemedView
+              className="flex flex-row w-full h-[40px] items-center justify-start mx-2 mt-2"
+              lightColor="transparent"
+              darkColor="transparent"
+            >
               <TouchableOpacity onPress={() => router.back()}>
-                <View className="w-10 h-10 bg-white rounded-full items-center justify-center">
+                <ThemedView className="w-10 h-10 rounded-full items-center justify-center bg-gray-200">
                   <Image
                     source={icons.backArrow}
                     contentFit="contain"
                     className="w-6 h-6"
                   />
-                </View>
+                </ThemedView>
               </TouchableOpacity>
               {title ? (
-                <Text className="text-xl font-semibold ml-5">{title}</Text>
+                <ThemedText className="text-xl font-semibold ml-5">
+                  {title}
+                </ThemedText>
               ) : (
                 <></>
               )}
-            </View>
-            <View className="w-full p-2 relative h-full">{children}</View>
-          </View>
+            </ThemedView>
+            <ThemedView
+              className="w-full p-2 relative h-full"
+              lightColor="transparent"
+              darkColor="transparent"
+            >
+              {children}
+            </ThemedView>
+          </ThemedView>
         </SafeAreaView>
       </StripeProvider>
-    </View>
+    </ThemedView>
   );
 };
 

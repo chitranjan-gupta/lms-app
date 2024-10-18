@@ -1,30 +1,20 @@
-// import AntDesign from "@expo/vector-icons/AntDesign";
-import { Image } from "expo-image";
-import { useEffect } from "react";
-import { Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import Feather from "@expo/vector-icons/Feather";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Categories } from "@/components/Categories";
-import { Courses, RecentCourses } from "@/components/Courses";
-import { icons } from "@/constants";
+import { Loader } from "@/components/Loader";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { useAuth, signOut } from "@/core/auth";
-import { useCategories } from "@/core/store/categories";
-import { useCourses } from "@/core/store/courses";
-import { removeUser } from "@/core/store/user";
+import { useInit } from "@/core/hooks/useInit";
+import { useUser } from "@/core/store/user";
 
 const Home = () => {
+  const colorScheme = useColorScheme();
+  const user = useUser((state) => state.user);
+  const removeUser = useUser((state) => state.removeUser);
   const isloading = useAuth((state) => state.isloading);
-  const loading = useCourses((state) => state.status);
-  const courses = useCourses((state) => state.courses);
-  const getCourses = useCourses((state) => state.getCourses);
-  const isPending = useCategories((state) => state.status);
-  const categories = useCategories((state) => state.categories);
-  const getCategories = useCategories((state) => state.getCategories);
-
-  useEffect(() => {
-    getCourses();
-    getCategories();
-  }, [getCategories, getCourses]);
+  const { loading } = useInit();
 
   const handleSignOut = async () => {
     removeUser();
@@ -32,37 +22,37 @@ const Home = () => {
   };
 
   return (
-    <View className="bg-white w-full h-full">
-      {loading === "pending" && isPending === "pending" ? (
-        <View className="w-full h-full flex flex-row justify-center items-center">
-          <ActivityIndicator size={"large"} color={"black"} />
-        </View>
+    <ThemedView className="w-full h-full" lightColor="white" darkColor="black">
+      {loading ? (
+        <Loader
+          variant={"large"}
+          color={colorScheme === "light" ? "black" : "white"}
+        />
       ) : (
-        <SafeAreaView className="bg-white w-full h-full ">
-          <View className="w-full px-5">
-            <View className="w-full flex flex-row items-center justify-between my-5">
-              <Text className="text-3xl font-extrabold">Welcome 👋</Text>
+        <SafeAreaView className=" w-full h-full">
+          <ThemedView className="w-full px-5">
+            <ThemedView className="w-full flex flex-row items-center justify-between my-5">
+              <ThemedText
+                className="text-2xl font-extrabold"
+                lightColor="black"
+                darkColor="white"
+              >{`Welcome ${user?.name || ""} 👋`}</ThemedText>
               <TouchableOpacity
                 onPress={handleSignOut}
-                className="justify-center items-center w-10 h-10 rounded-full bg-white"
+                className={`justify-center items-center w-10 h-10 rounded-full ${colorScheme === "light" ? "bg-white" : ""}`}
                 disabled={isloading}
               >
-                <Image source={icons.out} className="w-4 h-4" />
+                <Feather
+                  name="log-out"
+                  size={24}
+                  color={colorScheme === "light" ? "black" : "white"}
+                />
               </TouchableOpacity>
-            </View>
-          </View>
-          <Courses courses={courses} loading={loading} />
-          <View className="w-full px-5 flex flex-row items-center justify-between">
-            <Text className="text-3xl font-bold mt-3 mb-3">Categories</Text>
-          </View>
-          <Categories categories={categories} loading={isPending} />
-          <View className="w-full flex flex-row mx-5">
-            <Text className="text-3xl font-bold mt-5 mb-3">Recent Courses</Text>
-          </View>
-          <RecentCourses courses={courses} loading={loading} />
+            </ThemedView>
+          </ThemedView>
         </SafeAreaView>
       )}
-    </View>
+    </ThemedView>
   );
 };
 

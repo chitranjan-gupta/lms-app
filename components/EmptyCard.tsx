@@ -1,6 +1,8 @@
 import { Image } from "expo-image";
-import { View, Text, ActivityIndicator } from "react-native";
+import { ActivityIndicator, useColorScheme } from "react-native";
 
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { images } from "@/constants";
 
 export const EmptyCard = ({
@@ -14,10 +16,15 @@ export const EmptyCard = ({
   isImage?: boolean;
   imageUrl?: string;
 }) => {
+  const colorScheme = useColorScheme();
   return (
-    <View className="flex flex-col items-center justify-center">
+    <ThemedView
+      className="flex flex-col items-center justify-center"
+      lightColor="transparent"
+      darkColor="transparent"
+    >
       {!(loading === "idle") ? (
-        <View>
+        <ThemedView>
           {isImage ? (
             <Image
               source={imageUrl || images.noResult}
@@ -28,11 +35,14 @@ export const EmptyCard = ({
           ) : (
             <></>
           )}
-          <Text className="text-sm">{title}</Text>
-        </View>
+          <ThemedText className="text-sm">{title}</ThemedText>
+        </ThemedView>
       ) : (
-        <ActivityIndicator size="small" color="#000" />
+        <ActivityIndicator
+          size="small"
+          color={colorScheme === "light" ? "black" : "white"}
+        />
       )}
-    </View>
+    </ThemedView>
   );
 };

@@ -1,13 +1,14 @@
 import { Video, ResizeMode } from "expo-av";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator } from "react-native";
 
+import { ThemedView } from "@/components/ThemedView";
 import { muxStreamBaseUrl, videoExtension } from "@/constants";
 
 export const LectureVideo = ({ playbackId }: { playbackId: string }) => {
   return (
-    <View className="w-full h-[250px]">
+    <ThemedView className="w-full h-[250px]">
       {playbackId ? (
-        <View className="w-full h-[200px]">
+        <ThemedView className="w-full h-[200px]">
           <Video
             source={{
               uri: `${muxStreamBaseUrl}/${playbackId}.${videoExtension}`,
@@ -20,12 +21,12 @@ export const LectureVideo = ({ playbackId }: { playbackId: string }) => {
               height: "100%",
             }}
           />
-        </View>
+        </ThemedView>
       ) : (
-        <View className="w-full h-[250px] flex flex-row justify-center items-center">
+        <ThemedView className="w-full h-[250px] flex flex-row justify-center items-center">
           <ActivityIndicator size={"large"} />
-        </View>
+        </ThemedView>
       )}
-    </View>
+    </ThemedView>
   );
 };

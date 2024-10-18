@@ -1,14 +1,18 @@
 import { useEffect } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useColorScheme } from "react-native";
 
 import { ContentList } from "@/components/ContentList";
 import { CourseDetail } from "@/components/CourseDetail";
 import CourseLayout from "@/components/CourseLayout";
+import { Loader } from "@/components/Loader";
 import Payment from "@/components/Payment";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { useCourse } from "@/core/store/course";
 import { useUser } from "@/core/store/user";
 
 const CourseView = () => {
+  const colorScheme = useColorScheme();
   const user = useUser((state) => state.user);
   const isPurchased = useUser((state) => state.isPurchased);
   const getPurchase = useUser((state) => state.getPurchase);
@@ -25,21 +29,29 @@ const CourseView = () => {
   }, [courseid, getCourse, user, getPurchase]);
 
   return (
-    <>
+    <ThemedView lightColor="white" darkColor="black">
       {status !== "pending" && course ? (
         <CourseLayout>
-          <View className="flex flex-col mx-2">
-            <View className="self-center">
-              <Text className="text-xs font-semibold -mt-10 rounded-2xl p-2 bg-blue-100 text-blue-500">
+          <ThemedView
+            className="flex flex-col mx-2"
+            lightColor="transparent"
+            darkColor="transparent"
+          >
+            <ThemedView
+              className="self-center"
+              lightColor="transparent"
+              darkColor="transparent"
+            >
+              <ThemedText className="text-xs font-semibold -mt-10 rounded-2xl p-2 bg-blue-100 text-blue-500">
                 {course.category?.name}
-              </Text>
-            </View>
-            <View className="">
-              <Text className="text-3xl font-black text-gray-600">
+              </ThemedText>
+            </ThemedView>
+            <ThemedView lightColor="transparent" darkColor="transparent">
+              <ThemedText className="text-3xl font-black text-gray-600">
                 {course.title}
-              </Text>
-            </View>
-          </View>
+              </ThemedText>
+            </ThemedView>
+          </ThemedView>
           <ContentList
             ListHeaderComponent={<CourseDetail course={course} />}
             onPress="CourseDetail"
@@ -49,11 +61,12 @@ const CourseView = () => {
           )}
         </CourseLayout>
       ) : (
-        <View className="w-full h-full flex flex-row justify-center items-center bg-white">
-          <ActivityIndicator size={"large"} />
-        </View>
+        <Loader
+          variant={"large"}
+          color={colorScheme === "light" ? "black" : "white"}
+        />
       )}
-    </>
+    </ThemedView>
   );
 };
 

@@ -1,11 +1,13 @@
 import { useStripe } from "@stripe/stripe-react-native";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Image, Text, View } from "react-native";
+import { Alert, Image } from "react-native";
 import { ReactNativeModal } from "react-native-modal";
 
 import { client } from "@/api/common/client";
 import CustomButton from "@/components/CustomButton";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { images } from "@/constants";
 
 const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
@@ -84,16 +86,16 @@ const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
         isVisible={success}
         onBackdropPress={() => setSuccess(false)}
       >
-        <View className="flex flex-col items-center justify-center bg-white p-7 rounded-2xl">
+        <ThemedView className="flex flex-col items-center justify-center bg-white p-7 rounded-2xl">
           <Image source={images.check} className="w-28 h-28 mt-5" />
 
-          <Text className="text-2xl text-center font-bold mt-5">
+          <ThemedText className="text-2xl text-center font-bold mt-5">
             Payment Success
-          </Text>
+          </ThemedText>
 
-          <Text className="text-md text-blue-300 font-semibold text-center mt-3">
+          <ThemedText className="text-md text-blue-300 font-semibold text-center mt-3">
             Thank you.
-          </Text>
+          </ThemedText>
 
           <CustomButton
             title="Back Home"
@@ -103,7 +105,7 @@ const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
             }}
             className="mt-5"
           />
-        </View>
+        </ThemedView>
       </ReactNativeModal>
     </>
   );

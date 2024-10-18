@@ -1,9 +1,12 @@
 import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
-import { View, Text, Pressable } from "react-native";
+import { Pressable } from "react-native";
 
+import { ThemedView } from "@/components/ThemedView";
 import { setCourse } from "@/core/store/course";
 import { Course } from "@/types/type";
+
+import { ThemedText } from "./ThemedText";
 
 export const CourseCard = ({ item }: { item: Course }) => {
   const onPress = () => {
@@ -11,48 +14,79 @@ export const CourseCard = ({ item }: { item: Course }) => {
     router.push(`/(auth)/(courses)`);
   };
   return (
-    <View key={item.id} className="w-full">
+    <ThemedView
+      key={item.id}
+      className="w-full"
+      lightColor="transparent"
+      darkColor="black"
+    >
       <Pressable
         onPress={onPress}
         className="w-full flex flex-row my-2 gap-x-2"
       >
-        <View className="rounded-xl relative w-20">
+        <ThemedView
+          className="rounded-xl relative w-20 h-20"
+          lightColor="transparent"
+          darkColor="black"
+        >
           <ImageBackground
             source={item.imageUrl!}
             className="rounded-xl"
             alt={item.title}
             style={{
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 4,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 4.65,
+              elevation: 4,
               borderRadius: 12,
             }}
             imageStyle={{ borderRadius: 12 }}
           >
-            <View className="w-20 h-20 rounded-lg"></View>
+            <ThemedView
+              className="w-20 h-20 rounded-lg"
+              lightColor="transparent"
+              darkColor="transparent"
+            ></ThemedView>
           </ImageBackground>
-        </View>
-        <View className="relative w-9/12 flex flex-row justify-between">
-          <View className="flex flex-col">
-            <View>
-              <Text className="text-xl font-bold">{item.title}</Text>
-            </View>
-            <View>
-              <Text className="text-base font-semibold">
+        </ThemedView>
+        <ThemedView
+          className="relative w-9/12 flex flex-row justify-between"
+          lightColor="transparent"
+          darkColor="black"
+        >
+          <ThemedView
+            className="flex flex-col"
+            lightColor="transparent"
+            darkColor="black"
+          >
+            <ThemedView lightColor="transparent" darkColor="black">
+              <ThemedText className="text-xl font-bold">
+                {item.title}
+              </ThemedText>
+            </ThemedView>
+            <ThemedView lightColor="transparent" darkColor="black">
+              <ThemedText className="text-base font-semibold">
                 {item?.category?.name!}
-              </Text>
-            </View>
-            <View>
-              <Text className="text-xs">{`${item.chapters.length!} chapters`}</Text>
-            </View>
-          </View>
-          <View>
-            <Text
+              </ThemedText>
+            </ThemedView>
+            <ThemedView lightColor="transparent" darkColor="black">
+              <ThemedText className="text-xs">{`${item.chapters.length!} chapters`}</ThemedText>
+            </ThemedView>
+          </ThemedView>
+          <ThemedView lightColor="transparent" darkColor="black">
+            <ThemedText
               className={`text-black font-bold text-base`}
               style={{ color: "black" }}
             >
               {`₹ ${item.price!}`}
-            </Text>
-          </View>
-        </View>
+            </ThemedText>
+          </ThemedView>
+        </ThemedView>
       </Pressable>
-    </View>
+    </ThemedView>
   );
 };

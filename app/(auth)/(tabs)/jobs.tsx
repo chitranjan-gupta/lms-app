@@ -1,44 +1,35 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Pressable, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Categories } from "@/components/Categories";
-import { FeaturedCourses, RecentCourses } from "@/components/Courses";
+import { FeaturedCompanies } from "@/components/Companies";
 import { Filter } from "@/components/Filter";
+import { RecentJobs } from "@/components/Jobs";
 import { Loader } from "@/components/Loader";
 import { SearchBar } from "@/components/SearchBar";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useCategories } from "@/core/store/categories";
-import { useCourses } from "@/core/store/courses";
+import { useCompanies } from "@/core/store/companies";
+import { useJobs } from "@/core/store/jobs";
+import { shadowStyle } from "@/styles";
 
-const Courses = () => {
+const Jobs = () => {
   const colorScheme = useColorScheme();
-  const courses = useCourses((state) => state.courses);
-  const loading = useCourses((state) => state.status);
-  const categories = useCategories((state) => state.categories);
-  const isPending = useCategories((state) => state.status);
-  const [durations, setDurations] = useState<string[]>([]);
-  const [filterCategories, setFilterCategories] = useState<boolean>(false);
   const [sortCalendar, setSortCalendar] = useState<boolean>(false);
-  const [sortAlphabetic, setSortAlphabetic] = useState(false);
-  const [sortClock, setSortClock] = useState(false);
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [sortAlphabetic, setSortAlphabetic] = useState<boolean>(false);
+  const [sortClock, setSortClock] = useState<boolean>(false);
 
-  useEffect(() => {
-    setDurations([
-      "3-8 Hours",
-      "8-14 Hours",
-      "14-20 Hours",
-      "20-24 Hours",
-      "24-30 Hours",
-    ]);
-  }, [setDurations]);
+  const companies = useCompanies((state) => state.companies);
+  const loading = useCompanies((state) => state.status);
+  const jobs = useJobs((state) => state.jobs);
+  const isPending = useJobs((state) => state.status);
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const handleClosePress = () => bottomSheetRef.current?.close();
   const handleOpenPress = () => bottomSheetRef.current?.expand();
+
   return (
     <ThemedView className="w-full h-full" lightColor="white" darkColor="black">
       {loading === "pending" && isPending === "pending" ? (
@@ -49,67 +40,92 @@ const Courses = () => {
       ) : (
         <SafeAreaView className="w-full h-full">
           <ThemedView
-            className="w-full px-5 my-2"
+            className="w-full px-5"
             lightColor="transparent"
             darkColor="black"
           >
             <ThemedView
-              className="w-full flex flex-row items-center justify-between"
+              className="w-full flex flex-row items-center justify-between my-2"
               lightColor="transparent"
               darkColor="black"
             >
               <ThemedText className="text-3xl font-extrabold">
-                Find Your Courses
+                Find Your Jobs
               </ThemedText>
             </ThemedView>
           </ThemedView>
-          <SearchBar
-            onPress={handleOpenPress}
-            placeholder="Search Your Course"
-          />
-          <ThemedView
-            className="w-full px-5 flex flex-row items-center justify-between"
-            lightColor="transparent"
-            darkColor="black"
-          >
-            <ThemedText className="text-2xl font-bold">
-              Popular Courses
-            </ThemedText>
-            <Pressable>
-              <ThemedText className="text-xs font-bold text-green-500">
-                See all
-              </ThemedText>
-            </Pressable>
-          </ThemedView>
-          <FeaturedCourses courses={courses} loading={loading} />
-          <ThemedView
-            className="w-full px-5 flex flex-row items-center justify-between"
-            lightColor="transparent"
-            darkColor="black"
-          >
-            <ThemedText className="text-2xl font-bold mb-2">
-              Categories
-            </ThemedText>
-            <Pressable onPress={() => setFilterCategories((prev) => !prev)}>
-              <MaterialCommunityIcons
-                name={
-                  filterCategories
-                    ? "sort-alphabetical-ascending"
-                    : "sort-alphabetical-descending"
-                }
-                size={24}
-                color={colorScheme === "light" ? "black" : "white"}
-              />
-            </Pressable>
-          </ThemedView>
-          <Categories categories={categories} loading={isPending} />
+          <SearchBar onPress={handleOpenPress} placeholder="Search Your Job" />
           <ThemedView
             className="w-full px-5 flex flex-row items-center justify-between"
             lightColor="transparent"
             darkColor="black"
           >
             <ThemedText className="text-2xl font-bold mb-3">
-              Recent Courses
+              Popular Companies
+            </ThemedText>
+            <ThemedView
+              className="flex flex-row"
+              lightColor="transparent"
+              darkColor="black"
+            >
+              <Pressable>
+                <ThemedText className="text-xs font-bold mb-3 text-green-500">
+                  See all
+                </ThemedText>
+              </Pressable>
+            </ThemedView>
+          </ThemedView>
+          <FeaturedCompanies companies={companies} loading={loading} />
+          <ThemedView lightColor="transparent" darkColor="transparent">
+            <ThemedText className="text-2xl font-bold px-5">
+              Filter Job
+            </ThemedText>
+            <ThemedView
+              className="flex flex-row flex-wrap gap-x-3 gap-y-3 px-5"
+              lightColor="transparent"
+              darkColor="transparent"
+            >
+              <ThemedView
+                className="w-[170px] h-[80px] bg-violet-500 rounded-lg flex flex-row justify-center items-center"
+                style={shadowStyle.shadowSmall}
+              >
+                <ThemedText className="text-base text-center text-white">
+                  Remote Jobs
+                </ThemedText>
+              </ThemedView>
+              <ThemedView
+                className="w-[170px] h-[80px] bg-pink-500 rounded-lg flex flex-row justify-center items-center"
+                style={shadowStyle.shadowSmall}
+              >
+                <ThemedText className="text-base text-center text-white">
+                  Full Time
+                </ThemedText>
+              </ThemedView>
+              <ThemedView
+                className="w-[170px] h-[80px] bg-blue-500 rounded-lg flex flex-row justify-center items-center"
+                style={shadowStyle.shadowSmall}
+              >
+                <ThemedText className="text-base text-center text-white">
+                  On site Jobs
+                </ThemedText>
+              </ThemedView>
+              <ThemedView
+                className="w-[170px] h-[80px] bg-green-500 rounded-lg flex flex-row justify-center items-center"
+                style={shadowStyle.shadowSmall}
+              >
+                <ThemedText className="text-base text-center text-white">
+                  Part Time
+                </ThemedText>
+              </ThemedView>
+            </ThemedView>
+          </ThemedView>
+          <ThemedView
+            className="w-full px-5 flex flex-row items-center justify-between"
+            lightColor="transparent"
+            darkColor="black"
+          >
+            <ThemedText className="text-2xl font-bold mb-3">
+              Recent Jobs
             </ThemedText>
             <ThemedView
               className="flex flex-row"
@@ -149,17 +165,12 @@ const Courses = () => {
               </Pressable>
             </ThemedView>
           </ThemedView>
-          <RecentCourses courses={courses} loading={loading} />
-          <Filter
-            ref={bottomSheetRef}
-            categories={categories}
-            handleClosePress={handleClosePress}
-            durations={durations}
-          />
+          <RecentJobs jobs={jobs} loading={isPending} />
+          <Filter ref={bottomSheetRef} handleClosePress={handleClosePress} />
         </SafeAreaView>
       )}
     </ThemedView>
   );
 };
 
-export default Courses;
+export default Jobs;

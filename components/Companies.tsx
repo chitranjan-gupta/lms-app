@@ -1,49 +1,50 @@
 import { FlatList } from "react-native";
 
-import { CourseCard } from "@/components/CourseCard";
-import { CourseCardView } from "@/components/CourseCardView";
+import { CompanyCard } from "@/components/CompanyCard";
+import { CompanyCardView } from "@/components/CompanyCardView";
 import { EmptyCard } from "@/components/EmptyCard";
-import { Course } from "@/types/type";
+import { Company } from "@/types/type";
 
-export const FeaturedCourses = ({
-  courses,
+export const FeaturedCompanies = ({
+  companies,
   loading,
 }: {
-  courses: Course[];
+  companies: Company[];
   loading: string;
 }) => {
   return (
     <FlatList
-      data={courses}
-      renderItem={({ item, index }) => <CourseCardView item={item} />}
+      data={companies}
+      renderItem={({ item, index }) => <CompanyCardView item={item} />}
       style={{
-        height: 280,
+        height: 220,
         flexGrow: 0,
         marginTop: 5,
+        marginBottom: 5,
       }}
       keyExtractor={(item, index) => index.toString()}
-      className="px-4 w-full"
+      className="px-5 w-full"
       keyboardShouldPersistTaps="handled"
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       ListEmptyComponent={() => (
-        <EmptyCard title="No courses found" loading={loading} />
+        <EmptyCard title="No companies found" loading={loading} />
       )}
     />
   );
 };
 
-export const RecentCourses = ({
-  courses,
+export const RecentCompanies = ({
+  companies,
   loading,
 }: {
-  courses: Course[];
+  companies: Company[];
   loading: string;
 }) => {
   return (
     <FlatList
-      data={courses}
-      renderItem={({ item }) => <CourseCard item={item} />}
+      data={companies}
+      renderItem={({ item }) => <CompanyCard item={item} />}
       keyExtractor={(item, index) => index.toString()}
       className="px-5"
       keyboardShouldPersistTaps="handled"
@@ -52,7 +53,11 @@ export const RecentCourses = ({
         paddingBottom: 100,
       }}
       ListEmptyComponent={() => (
-        <EmptyCard title="No courses found" loading={loading} isImage={true} />
+        <EmptyCard
+          title="No companies found"
+          loading={loading}
+          isImage={true}
+        />
       )}
     />
   );

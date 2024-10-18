@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { useColorScheme } from "react-native";
 
 import { ContentList } from "@/components/ContentList";
 import CourseLayout from "@/components/CourseLayout";
 import { LectureVideo } from "@/components/LectureVideo";
+import { Loader } from "@/components/Loader";
 import { useChapter } from "@/core/store/chapter";
 import { useCourse } from "@/core/store/course";
 import { useLecture } from "@/core/store/lecture";
 import { useUser } from "@/core/store/user";
 
 const LectureView = () => {
+  const colorScheme = useColorScheme();
   const user = useUser((state) => state.user);
   const courseid = useCourse((state) => state.courseid);
   const chapterid = useChapter((state) => state.chapterid);
@@ -24,7 +26,7 @@ const LectureView = () => {
         chapterId: chapterid,
         courseId: courseid,
         purchase: true,
-        userId: user?.userId,
+        userId: (user as any)?.userId,
       });
     }
   }, [lectureid, chapterid, courseid, user, getLecture]);
@@ -41,9 +43,10 @@ const LectureView = () => {
           />
         </CourseLayout>
       ) : (
-        <View className="w-full h-full flex flex-row justify-center items-center bg-white">
-          <ActivityIndicator size={"large"} />
-        </View>
+        <Loader
+          variant={"large"}
+          color={colorScheme === "light" ? "black" : "white"}
+        />
       )}
     </>
   );

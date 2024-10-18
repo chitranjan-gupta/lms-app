@@ -101,3 +101,19 @@ export const muxStreamBaseUrl = "https://stream.mux.com";
 export const videoExtension = "m3u8";
 export const STRIPE_PUBLISHABLE_KEY =
   process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+export const snapPoints = ["50%", "70%"];
+
+export const config = {
+  endpoint: "https://cloud.appwrite.io/v1",
+  platform: "com.chitranjangupta.shikshasetu",
+  projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECTID,
+  databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASEID,
+  userscollectionId: process.env.EXPO_PUBLIC_APPWRITE_USERSCOLLECTIONID,
+  companiescollectionId: process.env.EXPO_PUBLIC_APPWRITE_COMPANIESCOLLECTIONID,
+  jobscollectionId: process.env.EXPO_PUBLIC_APPWRITE_JOBSCOLLECTIONID,
+  kanban_columncollectionId:
+    process.env.EXPO_PUBLIC_APPWRITE_KANBAN_COLUMNCOLLECTIONID,
+  kanban_rowcollectionId:
+    process.env.EXPO_PUBLIC_APPWRITE_KANBAN_ROWCOLLECTIONID,
+};
