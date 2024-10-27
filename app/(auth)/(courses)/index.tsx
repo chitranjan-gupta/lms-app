@@ -1,18 +1,19 @@
+import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
 
-import { ContentList } from "@/components/ContentList";
-import { CourseDetail } from "@/components/CourseDetail";
-import CourseLayout from "@/components/CourseLayout";
-import { Loader } from "@/components/Loader";
-import Payment from "@/components/Payment";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import {
+  ContentList,
+  CourseDetail,
+  CourseLayout,
+  Loader,
+  Payment,
+} from "@/components";
 import { useCourse } from "@/core/store/course";
 import { useUser } from "@/core/store/user";
+import { FocusAwareStatusBar, Text, View } from "@/ui";
 
 const CourseView = () => {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const user = useUser((state) => state.user);
   const isPurchased = useUser((state) => state.isPurchased);
   const getPurchase = useUser((state) => state.getPurchase);
@@ -29,29 +30,22 @@ const CourseView = () => {
   }, [courseid, getCourse, user, getPurchase]);
 
   return (
-    <ThemedView lightColor="white" darkColor="black">
+    <View className="w-full h-full">
+      <FocusAwareStatusBar />
       {status !== "pending" && course ? (
         <CourseLayout>
-          <ThemedView
-            className="flex flex-col mx-2"
-            lightColor="transparent"
-            darkColor="transparent"
-          >
-            <ThemedView
-              className="self-center"
-              lightColor="transparent"
-              darkColor="transparent"
-            >
-              <ThemedText className="text-xs font-semibold -mt-10 rounded-2xl p-2 bg-blue-100 text-blue-500">
-                {course.category?.name}
-              </ThemedText>
-            </ThemedView>
-            <ThemedView lightColor="transparent" darkColor="transparent">
-              <ThemedText className="text-3xl font-black text-gray-600">
-                {course.title}
-              </ThemedText>
-            </ThemedView>
-          </ThemedView>
+          <View className="flex flex-col mx-2">
+            <View className="self-center">
+              <Text className="text-xs font-semibold -mt-10 rounded-2xl p-2 bg-blue-100 !text-blue-500">
+                {course?.category?.name}
+              </Text>
+            </View>
+            <View>
+              <Text className="text-3xl font-black !text-gray-600">
+                {course?.title}
+              </Text>
+            </View>
+          </View>
           <ContentList
             ListHeaderComponent={<CourseDetail course={course} />}
             onPress="CourseDetail"
@@ -66,7 +60,7 @@ const CourseView = () => {
           color={colorScheme === "light" ? "black" : "white"}
         />
       )}
-    </ThemedView>
+    </View>
   );
 };
 

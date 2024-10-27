@@ -6,12 +6,11 @@ import {
   Platform,
 } from "react-native";
 
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { Text, View } from "@/ui";
 
-import type { InputFieldProps } from "@/types/type";
+import type { InputFieldProps } from "@/types";
 
-const InputField = ({
+export const InputField = ({
   label,
   IconLeft,
   IconRight,
@@ -28,11 +27,11 @@ const InputField = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ThemedView className="my-2 w-full">
-          <ThemedText className={`text-lg font-bold mb-3 ${labelStyle}`}>
+        <View className="my-2 w-full">
+          <Text className={`text-lg font-bold mb-3 ${labelStyle}`}>
             {label}
-          </ThemedText>
-          <ThemedView
+          </Text>
+          <View
             className={`flex flex-row justify-start items-center relative bg-neutral-100 rounded-full border border-neutral-100 focus:border-primary-500  ${containerStyle}`}
           >
             {IconLeft}
@@ -42,11 +41,9 @@ const InputField = ({
               {...props}
             />
             {IconRight}
-          </ThemedView>
-        </ThemedView>
+          </View>
+        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };
-
-export default InputField;

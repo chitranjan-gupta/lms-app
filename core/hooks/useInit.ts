@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 
-import { useCategories } from "@/core/store/categories";
+// import { useCategories } from "@/core/store/categories";
 import { useColumns } from "@/core/store/columns";
 import { useCompanies } from "@/core/store/companies";
-import { useCourses } from "@/core/store/courses";
+// import { useCourses } from "@/core/store/courses";
 import { useJobs } from "@/core/store/jobs";
 import { useRows } from "@/core/store/rows";
+import { useUser } from "@/core/store/user";
 
 export const useInit = () => {
-  const getCourses = useCourses((state) => state.getCourses);
-  const coursesState = useCourses((state) => state.status);
-  const getCategories = useCategories((state) => state.getCategories);
-  const categoriesState = useCategories((state) => state.status);
+  const getUser = useUser((state) => state.getUser);
+  const userStatus = useUser((state) => state.status);
+  // const getCourses = useCourses((state) => state.getCourses);
+  // const coursesState = useCourses((state) => state.status);
+  // const getCategories = useCategories((state) => state.getCategories);
+  // const categoriesState = useCategories((state) => state.status);
   const getCompanies = useCompanies((state) => state.getCompanies);
   const companiesState = useCompanies((state) => state.status);
   const getJobs = useJobs((state) => state.getJobs);
@@ -24,8 +27,9 @@ export const useInit = () => {
 
   useEffect(() => {
     if (
-      coursesState === "pending" ||
-      categoriesState === "pending" ||
+      userStatus === "pending" ||
+      // coursesState === "pending" ||
+      // categoriesState === "pending" ||
       companiesState === "pending" ||
       jobsState === "pending" ||
       columnsState === "pending" ||
@@ -36,8 +40,9 @@ export const useInit = () => {
       setLoading(false);
     }
   }, [
-    coursesState,
-    categoriesState,
+    userStatus,
+    // coursesState,
+    // categoriesState,
     companiesState,
     jobsState,
     columnsState,
@@ -45,13 +50,25 @@ export const useInit = () => {
   ]);
 
   useEffect(() => {
-    getCourses();
-    getCategories();
-    getCompanies();
-    getJobs();
-    getColumns();
-    getRows();
-  }, [getCategories, getCourses, getCompanies, getJobs, getColumns, getRows]);
+    async function init() {
+      await getUser();
+      // getCourses();
+      // getCategories();
+      await getCompanies();
+      await getJobs();
+      await getColumns();
+      await getRows();
+    }
+    init();
+  }, [
+    getUser,
+    // getCategories,
+    // getCourses,
+    getCompanies,
+    getJobs,
+    getColumns,
+    getRows,
+  ]);
 
   return { loading };
 };

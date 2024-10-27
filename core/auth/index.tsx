@@ -1,13 +1,14 @@
-import axios from "axios";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { client } from "@/api/common/client";
-import { BASE_URL } from "@/constants";
-import { getItem, removeItem, setItem } from "@/core/storage";
-import { setRequestInterceptor, setResponseInterceptior } from "@/core/utils";
+import { removeItem, setItem } from "@/core/storage";
+import {
+  AppWriteCurrentSession,
+  AppWriteLogOut,
+  AppWriteSignIn,
+} from "@/lib/appwrite";
 
-import type { TokenType } from "@/types/type";
+import type { TokenType } from "@/types";
 
 const TOKEN = "token";
 
@@ -22,6 +23,7 @@ interface AuthState {
   isloading: boolean;
   error: string | null;
   signIn: (data: SignInState) => Promise<void>;
+  signin: () => void;
   signOut: () => Promise<void>;
   refresh: (newToken: TokenType | null, logout: boolean) => Promise<void>;
   hydrate: () => Promise<void>;
@@ -35,36 +37,36 @@ export const useAuth = create<AuthState>()(
     token: null,
     signIn: async (data) => {
       try {
-        set({ isloading: true });
-        const response = await axios.post(`${BASE_URL}/user/signin`, {
-          email: data.email,
-          password: data.password,
-        });
-        if (response.status === 200) {
+        set({ isloading: true, error: null });
+        const session = await AppWriteSignIn(data.email, data.password);
+        if (session) {
           const token = {
-            access: response.data.access_token,
-            refresh: response.data.access_token,
+            access: session.providerAccessToken,
+            refresh: session.providerRefreshToken,
           };
           set((state) => ({
             status: "signIn",
             token: token,
           }));
-          setRequestInterceptor({ token });
-          setResponseInterceptior({ token: token, refresh: get().refresh });
           await setItem<TokenType>(TOKEN, token);
         }
       } catch (e: any) {
-        console.log(e.response);
-        set({ error: e.response.data.message });
+        console.log(e);
+        set({ error: e.message });
       } finally {
         set({ isloading: false });
       }
     },
+    signin: () => {
+      set((state) => ({
+        status: "signIn",
+      }));
+    },
     signOut: async () => {
       try {
         set({ isloading: true });
-        const response = await client.get(`user/logout`);
-        if (response.status === 200) {
+        const status = await AppWriteLogOut();
+        if (status) {
           await removeItem(TOKEN);
           set((state) => ({ status: "signOut", token: null }));
         }
@@ -76,19 +78,19 @@ export const useAuth = create<AuthState>()(
     },
     refresh: async (newToken, logout) => {
       try {
-        set({ isloading: true });
-        if (!logout && newToken) {
-          set((state) => ({
-            status: "signIn",
-            token: newToken,
-          }));
-          setRequestInterceptor({ token: newToken! });
-          setResponseInterceptior({ token: newToken!, refresh: get().refresh });
-          await setItem<TokenType>(TOKEN, newToken!);
-        } else {
-          set({ status: "signOut", token: null });
-          await removeItem(TOKEN);
-        }
+        // set({ isloading: true });
+        // if (!logout && newToken) {
+        //   set((state) => ({
+        //     status: "signIn",
+        //     token: newToken,
+        //   }));
+        //   setRequestInterceptor({ token: newToken! });
+        //   setResponseInterceptior({ token: newToken!, refresh: get().refresh });
+        //   await setItem<TokenType>(TOKEN, newToken!);
+        // } else {
+        //   set({ status: "signOut", token: null });
+        //   await removeItem(TOKEN);
+        // }
       } catch (e) {
         console.log(e);
       } finally {
@@ -98,16 +100,15 @@ export const useAuth = create<AuthState>()(
     hydrate: async () => {
       try {
         set({ isloading: true });
-        const token = await getItem<TokenType>(TOKEN);
-        if (token !== null) {
-          setRequestInterceptor({ token });
-          setResponseInterceptior({ token: token, refresh: get().refresh });
-          set({ status: "signIn", token: token });
+        const token = await AppWriteCurrentSession();
+        if (token.current) {
+          set({ status: "signIn" });
         } else {
           set({ status: "signOut", token: null });
         }
       } catch (e) {
-        console.error(e);
+        set({ status: "signOut", token: null });
+        console.log(e);
       } finally {
         set({ isloading: false });
       }
@@ -118,3 +119,4 @@ export const useAuth = create<AuthState>()(
 export const signOut = () => useAuth.getState().signOut();
 export const signIn = (data: SignInState) => useAuth.getState().signIn(data);
 export const hydrateAuth = () => useAuth.getState().hydrate();
+export const signin = () => useAuth.getState().signin();

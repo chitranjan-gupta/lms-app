@@ -102,7 +102,7 @@ export const videoExtension = "m3u8";
 export const STRIPE_PUBLISHABLE_KEY =
   process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
-export const snapPoints = ["50%", "70%"];
+export const snapPoints = ["50%", "70%", "100%"];
 
 export const config = {
   endpoint: "https://cloud.appwrite.io/v1",

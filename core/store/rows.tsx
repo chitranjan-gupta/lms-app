@@ -3,14 +3,18 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 import { config } from "@/constants";
-import { getColumns } from "@/core/store/columns";
 import { databases } from "@/lib/appwrite";
 
-import type { Kanban_Row } from "@/types/type";
+import { getColumns, listColumns } from "./columns";
+import { currentUser } from "./user";
 
-type Row = Omit<Kanban_Row, "$id" | "kanbanColumn"> & {
+import type { Kanban_Row } from "@/types";
+
+interface Row extends Omit<Kanban_Row, "$id" | "kanbanColumn"> {
   columnId: string;
-};
+}
+
+interface InputRow extends Omit<Row, "columnId" | "index"> {}
 
 interface RowsState {
   status: "idle" | "pending";
@@ -19,6 +23,7 @@ interface RowsState {
   getRows: () => Promise<void>;
   addRows: (rows: Row[]) => Promise<void>;
   updateRows: (rows: Kanban_Row[]) => Promise<void>;
+  bookmarkRow: (row: InputRow) => Promise<void>;
   hydrate: () => void;
 }
 
@@ -31,10 +36,15 @@ export const useRows = create<RowsState>()(
     },
     getRows: async () => {
       set({ status: "pending" });
+      const user = currentUser();
       const response = await databases.listDocuments(
         config.databaseId!,
         config.kanban_rowcollectionId!,
-        [Query.orderAsc("index"), Query.limit(10)],
+        [
+          // Query.equal("kanbanColumn.user", user?.id!),
+          Query.orderAsc("index"),
+          Query.limit(10),
+        ],
       );
       set({
         status: "idle",
@@ -77,6 +87,23 @@ export const useRows = create<RowsState>()(
       await getColumns();
       await get().getRows();
     },
+    bookmarkRow: async (row: InputRow) => {
+      const columns = listColumns();
+      await databases.createDocument(
+        config.databaseId!,
+        config.kanban_rowcollectionId!,
+        ID.unique(),
+        {
+          title: row.title,
+          subtitle: row.subtitle,
+          kanbanColumn: columns[0].$id,
+          index: columns[0].kanbanRow.length + 1,
+          job: row.job?.$id,
+        },
+      );
+      await getColumns();
+      await get().getRows();
+    },
     hydrate: async () => {
       try {
       } catch (e) {
@@ -88,4 +115,7 @@ export const useRows = create<RowsState>()(
 
 export const getRows = () => useRows.getState().getRows();
 export const setRows = (rows: Kanban_Row[]) => useRows.getState().setRows(rows);
+export const addRows = (rows: Row[]) => useRows.getState().addRows(rows);
+export const bookmarkRow = (row: InputRow) =>
+  useRows.getState().bookmarkRow(row);
 export const hydrateRows = () => useRows.getState().hydrate();

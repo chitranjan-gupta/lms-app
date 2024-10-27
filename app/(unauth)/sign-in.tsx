@@ -1,15 +1,20 @@
-import Feather from "@expo/vector-icons/Feather";
-import Fontisto from "@expo/vector-icons/Fontisto";
-import Checkbox from "expo-checkbox";
 import { Link, router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 
-import CustomButton from "@/components/CustomButton";
-import InputField from "@/components/InputField";
+import { CustomButton, InputField } from "@/components";
 import { images } from "@/constants";
 import { useAuth } from "@/core/auth";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  Checkbox,
+  Feather,
+  Fontisto,
+  ImageBackground,
+  Alert,
+} from "@/ui";
 
 const SignIn = () => {
   const status = useAuth((state) => state.status);
@@ -45,15 +50,16 @@ const SignIn = () => {
 
   return (
     <View className="w-full h-full">
-      <StatusBar style="light" />
-      <ScrollView className="flex-1 bg-white w-full h-full">
-        <View className="flex-1 bg-white">
-          <View className="relative w-full h-[250px] bg-white rounded-bl-3xl">
-            <Image
+      <ScrollView className="flex-1 w-full h-full">
+        <View className="flex-1 ">
+          <View className="relative w-full h-[250px] rounded-bl-3xl">
+            <ImageBackground
               source={images.background}
               className="z-0 w-full h-[250px] rounded-bl-3xl"
-            />
-            <Text className="text-2xl text-white font-bold absolute bottom-5 left-5">
+            >
+              <View className="w-full h-[250px] rounded-bl-3xl"></View>
+            </ImageBackground>
+            <Text className="text-2xl font-bold absolute bottom-5 left-5">
               Welcome 👋
             </Text>
           </View>
@@ -113,7 +119,7 @@ const SignIn = () => {
               }
             />
             <View>
-              <Text className="text-red-500">{error}</Text>
+              <Text className="!text-red-500">{error}</Text>
             </View>
             <View className="w-full flex flex-row items-center gap-x-2 p-3">
               <Checkbox value={isChecked} onValueChange={setChecked} />
@@ -135,8 +141,7 @@ const SignIn = () => {
               href="/sign-up"
               className="text-lg text-center text-general-200 mt-10"
             >
-              Don't have an account?{" "}
-              <Text className="text-primary-500">Sign Up</Text>
+              <Text className="">Don't have an account? Sign Up</Text>
             </Link>
           </View>
         </View>

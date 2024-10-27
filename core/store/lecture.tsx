@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 import { client } from "@/api/common/client";
-import { Lecture } from "@/types/type";
+import { Lecture } from "@/types";
 
 interface FetchState {
   lectureId: string;

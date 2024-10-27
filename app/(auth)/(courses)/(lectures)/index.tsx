@@ -1,17 +1,15 @@
+import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
 
-import { ContentList } from "@/components/ContentList";
-import CourseLayout from "@/components/CourseLayout";
-import { LectureVideo } from "@/components/LectureVideo";
-import { Loader } from "@/components/Loader";
+import { ContentList, CourseLayout, LectureVideo, Loader } from "@/components";
 import { useChapter } from "@/core/store/chapter";
 import { useCourse } from "@/core/store/course";
 import { useLecture } from "@/core/store/lecture";
 import { useUser } from "@/core/store/user";
+import { FocusAwareStatusBar, View } from "@/ui";
 
 const LectureView = () => {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const user = useUser((state) => state.user);
   const courseid = useCourse((state) => state.courseid);
   const chapterid = useChapter((state) => state.chapterid);
@@ -32,7 +30,8 @@ const LectureView = () => {
   }, [lectureid, chapterid, courseid, user, getLecture]);
 
   return (
-    <>
+    <View className="w-full h-full">
+      <FocusAwareStatusBar />
       {status !== "pending" && lecture ? (
         <CourseLayout>
           <ContentList
@@ -48,7 +47,7 @@ const LectureView = () => {
           color={colorScheme === "light" ? "black" : "white"}
         />
       )}
-    </>
+    </View>
   );
 };
 

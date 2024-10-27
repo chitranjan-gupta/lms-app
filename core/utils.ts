@@ -3,7 +3,7 @@ import { Linking } from "react-native";
 
 import { client } from "@/api/common/client";
 import { BASE_URL } from "@/constants";
-import { TokenType } from "@/types/type";
+import { TokenType } from "@/types";
 
 export function openLinkInBrowser(url: string) {
   Linking.canOpenURL(url).then((canOpen) => canOpen && Linking.openURL(url));

@@ -38,8 +38,15 @@ export const kanbanStyles = StyleSheet.create({
     columnGap: 10,
     borderWidth: 1,
     borderColor: "gray",
+    borderRadius: 10,
+    paddingVertical: 10,
+    elevation: 10,
   },
   kanbanCard: {
     height: 100,
+    borderRadius: 10,
+    elevation: 10,
+    borderColor: "#93c5fd",
+    borderLeftWidth: 5,
   },
 });

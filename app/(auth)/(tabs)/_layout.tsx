@@ -1,12 +1,11 @@
 import { Tabs } from "expo-router";
+import { useColorScheme } from "nativewind";
 
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { icons } from "@/constants";
+import { TabBarIcon } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/core/hooks/useColorScheme";
 
 export default function Layout() {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <Tabs
@@ -23,7 +22,7 @@ export default function Layout() {
           overflow: "hidden",
           marginHorizontal: 20,
           marginBottom: 20,
-          height: 78,
+          height: 70,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -40,10 +39,9 @@ export default function Layout() {
           tabBarIcon: ({ focused, color }) => (
             <TabBarIcon
               name="home"
-              source={icons.home}
               focused={focused}
               color={color}
-              icontype={"image"}
+              icontype={"entypo"}
             />
           ),
         }}
@@ -55,8 +53,8 @@ export default function Layout() {
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
             <TabBarIcon
-              focused={focused}
               name="book"
+              focused={focused}
               color={color}
               icontype={"feather"}
             />
@@ -70,8 +68,8 @@ export default function Layout() {
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
             <TabBarIcon
-              focused={focused}
               name="suitcase"
+              focused={focused}
               color={color}
               icontype={"fontawesome"}
             />
@@ -100,11 +98,10 @@ export default function Layout() {
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
             <TabBarIcon
-              name="profile"
-              source={icons.profile}
+              name="user-circle"
               focused={focused}
               color={color}
-              icontype={"image"}
+              icontype={"fontawesome"}
             />
           ),
         }}

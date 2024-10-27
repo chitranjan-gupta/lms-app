@@ -1,50 +1,39 @@
-import AntDesign from "@expo/vector-icons/AntDesign";
-import BottomSheet from "@gorhom/bottom-sheet";
 import Slider from "@react-native-community/slider";
-import { forwardRef, useState, Ref } from "react";
-import { Pressable, FlatList, useColorScheme } from "react-native";
+import { useColorScheme } from "nativewind";
+import { useState } from "react";
 
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { snapPoints } from "@/constants";
-import { Category } from "@/types/type";
+import {
+  Pressable,
+  FlatList,
+  Text,
+  View,
+  Modal,
+  type ModalReturn,
+  AntDesign,
+} from "@/ui";
+
+import type { Category } from "@/types";
 
 interface FilterProps {
   handleClosePress: () => void;
+  modal: ModalReturn;
   categories?: Category[];
   durations?: string[];
 }
 
-const FilterComponent = (
-  { handleClosePress, categories, durations }: FilterProps,
-  ref: Ref<BottomSheet>,
-) => {
-  const colorScheme = useColorScheme();
+export const Filter = ({
+  handleClosePress,
+  modal,
+  categories,
+  durations,
+}: FilterProps) => {
+  const { colorScheme } = useColorScheme();
   const [priceSlider, setPriceSlider] = useState<number>(90);
 
   return (
-    <BottomSheet
-      ref={ref}
-      index={0}
-      snapPoints={snapPoints}
-      enablePanDownToClose={true}
-      backgroundStyle={{
-        backgroundColor: colorScheme === "light" ? "white" : "black",
-      }}
-      handleIndicatorStyle={{
-        backgroundColor: colorScheme === "light" ? "black" : "white",
-      }}
-    >
-      <ThemedView
-        className="p-2 w-full h-full flex flex-col"
-        lightColor="white"
-        darkColor="black"
-      >
-        <ThemedView
-          className="w-full flex flex-row justify-start items-start gap-x-[120px]"
-          lightColor="white"
-          darkColor="black"
-        >
+    <Modal ref={modal.ref}>
+      <View className="p-2 w-full h-full flex flex-col bg-white dark:bg-black">
+        <View className="w-full flex flex-row justify-start items-start gap-x-[120px]">
           <Pressable
             onPress={handleClosePress}
             accessibilityLabel="Close filter"
@@ -56,29 +45,19 @@ const FilterComponent = (
               color={colorScheme === "light" ? "black" : "white"}
             />
           </Pressable>
-          <ThemedView lightColor="white" darkColor="black">
-            <ThemedText className="text-lg font-black">
-              Search Filter
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
+          <View>
+            <Text className="text-lg font-black">Search Filter</Text>
+          </View>
+        </View>
         {categories && (
-          <ThemedView lightColor="white" darkColor="black">
-            <ThemedText className="text-xl font-bold mt-3 mb-3">
-              Categories
-            </ThemedText>
+          <View>
+            <Text className="text-xl font-bold mt-3 mb-3">Categories</Text>
             <FlatList
               data={categories}
               renderItem={({ item }) => (
-                <ThemedView
-                  className="bg-blue-500 h-[25px] mr-2 p-1 rounded-md"
-                  lightColor="white"
-                  darkColor="black"
-                >
-                  <ThemedText className="text-white text-xs">
-                    {item.name}
-                  </ThemedText>
-                </ThemedView>
+                <View className="bg-blue-500 h-[25px] mr-2 p-1 rounded-md">
+                  <Text className="text-white text-xs">{item.name}</Text>
+                </View>
               )}
               style={{
                 height: 40,
@@ -87,17 +66,13 @@ const FilterComponent = (
               keyExtractor={(_item, index) => index.toString()}
               horizontal={true}
             />
-          </ThemedView>
+          </View>
         )}
-        <ThemedView
-          className="flex flex-col my-3"
-          lightColor="white"
-          darkColor="black"
-        >
-          <ThemedView lightColor="white" darkColor="black">
-            <ThemedText className="text-lg font-black">Price</ThemedText>
-          </ThemedView>
-          <ThemedView className="w-full" lightColor="white" darkColor="black">
+        <View className="flex flex-col my-3">
+          <View>
+            <Text className="text-lg font-black">Price</Text>
+          </View>
+          <View className="w-full">
             <Slider
               minimumValue={0}
               maximumValue={20000}
@@ -108,23 +83,17 @@ const FilterComponent = (
               minimumTrackTintColor={colorScheme === "light" ? "blue" : "white"}
               style={{ width: "100%", height: 40 }}
             />
-          </ThemedView>
-        </ThemedView>
+          </View>
+        </View>
         {durations && (
-          <ThemedView lightColor="white" darkColor="black">
-            <ThemedText className="text-xl font-bold mt-3 mb-3">
-              Durations
-            </ThemedText>
+          <View>
+            <Text className="text-xl font-bold mt-3 mb-3">Durations</Text>
             <FlatList
               data={durations}
               renderItem={({ item }) => (
-                <ThemedView
-                  className="bg-blue-500 h-[25px] mr-2 p-1 rounded-md"
-                  lightColor="white"
-                  darkColor="black"
-                >
-                  <ThemedText className="text-white text-xs">{item}</ThemedText>
-                </ThemedView>
+                <View className="bg-blue-500 h-[25px] mr-2 p-1 rounded-md">
+                  <Text className="text-white text-xs">{item}</Text>
+                </View>
               )}
               style={{
                 height: 40,
@@ -133,27 +102,17 @@ const FilterComponent = (
               keyExtractor={(_item, index) => index.toString()}
               horizontal={true}
             />
-          </ThemedView>
+          </View>
         )}
-        <ThemedView
-          className="flex flex-row gap-x-3 px-2"
-          lightColor="white"
-          darkColor="black"
-        >
+        <View className="flex flex-row gap-x-3 px-2">
           <Pressable className="border border-blue-500 rounded-xl w-[80px] h-[50px] flex flex-row justify-center items-center">
-            <ThemedText className="text-blue-500 font-black text-base">
-              Clear
-            </ThemedText>
+            <Text className="text-blue-500 font-black text-base">Clear</Text>
           </Pressable>
           <Pressable className="bg-blue-500 rounded-xl w-[270px] h-[50px] flex flex-row justify-center items-center">
-            <ThemedText className="text-white text-base font-bold">
-              Apply Filter
-            </ThemedText>
+            <Text className="text-white text-base font-bold">Apply Filter</Text>
           </Pressable>
-        </ThemedView>
-      </ThemedView>
-    </BottomSheet>
+        </View>
+      </View>
+    </Modal>
   );
 };
-
-export const Filter = forwardRef<BottomSheet, FilterProps>(FilterComponent);

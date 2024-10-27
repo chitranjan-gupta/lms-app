@@ -5,7 +5,7 @@ import { devtools } from "zustand/middleware";
 import { config } from "@/constants";
 import { databases } from "@/lib/appwrite";
 
-import type { Company } from "@/types/type";
+import type { Company } from "@/types";
 
 interface CompaniesState {
   status: "idle" | "pending";

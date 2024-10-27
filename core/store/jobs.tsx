@@ -5,7 +5,7 @@ import { devtools } from "zustand/middleware";
 import { config } from "@/constants";
 import { databases } from "@/lib/appwrite";
 
-import type { Job } from "@/types/type";
+import type { Job } from "@/types";
 
 interface JobsState {
   status: "idle" | "pending";

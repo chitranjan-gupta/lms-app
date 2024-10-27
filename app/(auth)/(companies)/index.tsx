@@ -1,25 +1,31 @@
-import Entypo from "@expo/vector-icons/Entypo";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image } from "expo-image";
 import { router } from "expo-router";
+import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
-import { TouchableOpacity, useColorScheme } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-import CustomButton from "@/components/CustomButton";
-import { ExternalLink } from "@/components/ExternalLink";
-import { FlipCard } from "@/components/FlipCard";
-import { RecentJobs } from "@/components/Jobs";
-import { Loader } from "@/components/Loader";
-import { SwitchBar } from "@/components/SwitchBar";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import {
+  CustomButton,
+  ExternalLink,
+  FlipCard,
+  RecentJobs,
+  Loader,
+  SwitchBar,
+} from "@/components";
 import { useCompany } from "@/core/store/company";
 import { shadowStyle } from "@/styles";
+import {
+  SafeAreaView,
+  Text,
+  View,
+  TouchableOpacity,
+  Entypo,
+  Ionicons,
+  FocusAwareStatusBar,
+  ImageBackground,
+} from "@/ui";
 
 const CompaniesView = () => {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const companyStatus = useCompany((state) => state.status);
   const companyid = useCompany((state) => state.companyid);
   const company = useCompany((state) => state.company);
@@ -42,86 +48,65 @@ const CompaniesView = () => {
   };
 
   return (
-    <ThemedView className="w-full h-full" lightColor="white" darkColor="black">
+    <View className="w-full h-full">
+      <FocusAwareStatusBar />
       {companyStatus !== "pending" && company ? (
         <SafeAreaView className="flex flex-col justify-between w-full h-full">
-          <ThemedView lightColor="transparent" darkColor="transparent">
-            <ThemedView
-              className="flex flex-row w-full h-[40px] items-center justify-between px-2 mt-2"
-              lightColor="transparent"
-              darkColor="transparent"
-            >
+          <View>
+            <View className="flex flex-row w-full h-[40px] items-center justify-between px-2 mt-2">
               <TouchableOpacity onPress={() => router.back()}>
-                <ThemedView
-                  className="w-10 h-10 bg-gray-200 rounded-full items-center justify-center"
-                  lightColor="transparent"
-                  darkColor="transparent"
-                >
+                <View className="w-10 h-10 bg-gray-200 rounded-full items-center justify-center">
                   <Ionicons name="arrow-back" size={24} color="black" />
-                </ThemedView>
+                </View>
               </TouchableOpacity>
               <TouchableOpacity>
-                <ThemedView
-                  className="w-10 h-10 bg-gray-200 rounded-full items-center justify-center"
-                  lightColor="transparent"
-                  darkColor="transparent"
-                >
+                <View className="w-10 h-10 bg-gray-200 rounded-full items-center justify-center">
                   <Entypo name="dots-three-vertical" size={24} color="black" />
-                </ThemedView>
+                </View>
               </TouchableOpacity>
-            </ThemedView>
+            </View>
 
-            <ThemedView
-              className="w-full flex flex-col justify-center items-center mb-5"
-              lightColor="transparent"
-              darkColor="transparent"
-            >
-              <ThemedView className="w-24 h-24 bg-gray-200 rounded-full items-center justify-center">
-                <Image
+            <View className="w-full flex flex-col justify-center items-center mb-5">
+              <View className="w-24 h-24 bg-gray-200 rounded-full items-center justify-center">
+                <ImageBackground
                   source={company?.logo_url}
                   contentFit="contain"
                   className="w-20 h-20"
-                />
-              </ThemedView>
-              <ThemedView lightColor="transparent" darkColor="transparent">
-                <ThemedText className="text-base">{company?.name}</ThemedText>
-              </ThemedView>
-            </ThemedView>
-            <ThemedView
-              className="w-full flex flex-row justify-center items-center gap-x-5 px-2 mb-5"
-              lightColor="transparent"
-              darkColor="transparent"
-            >
-              <ThemedView
+                >
+                  <View className="w-20 h-20 rounded-full"></View>
+                </ImageBackground>
+              </View>
+              <View>
+                <Text className="text-base">{company?.name}</Text>
+              </View>
+            </View>
+            <View className="w-full flex flex-row justify-center items-center gap-x-5 px-2 mb-5">
+              <View
                 style={shadowStyle.shadowBlack}
                 className="bg-gray-200 p-3 rounded-xl"
               >
-                <ThemedText className="text-black text-base">
+                <Text className="!text-black text-base">
                   {company?.industry}
-                </ThemedText>
-              </ThemedView>
-              <ThemedView
+                </Text>
+              </View>
+              <View
                 style={shadowStyle.shadowBlack}
                 className="bg-gray-200 p-3 rounded-xl"
               >
-                <ThemedText className="text-black text-base">
+                <Text className="!text-black text-base">
                   {company?.location}
-                </ThemedText>
-              </ThemedView>
-              <ThemedView
+                </Text>
+              </View>
+              <View
                 style={shadowStyle.shadowBlack}
                 className="bg-gray-200 p-3 rounded-xl"
               >
-                <ThemedText className="text-black text-base">
+                <Text className="!text-black text-base">
                   {company?.jobs.length}
-                </ThemedText>
-              </ThemedView>
-            </ThemedView>
-            <ThemedView
-              className="px-2 w-full mb-5"
-              lightColor="transparent"
-              darkColor="transparent"
-            >
+                </Text>
+              </View>
+            </View>
+            <View className="px-2 w-full mb-5">
               <SwitchBar
                 value={isOn}
                 isActive={isActive}
@@ -130,56 +115,37 @@ const CompaniesView = () => {
                   height: 50,
                 }}
               />
-            </ThemedView>
+            </View>
             <FlipCard
               isFlipped={isFlipped}
               cardStyle={{
                 width: "100%",
               }}
               FlippedContent={
-                <ThemedView
-                  className="flex flex-col px-2 mb-2 w-full"
-                  lightColor="transparent"
-                  darkColor="transparent"
-                >
-                  <RecentJobs jobs={company?.jobs!} loading={companyStatus} />
-                </ThemedView>
+                <View className="flex flex-col px-2 mb-2 w-full bg-white dark:bg-black">
+                  <RecentJobs
+                    jobs={company?.jobs}
+                    loading={companyStatus}
+                    company={company}
+                    headerComponent={<></>}
+                  />
+                </View>
               }
               RegularContent={
-                <ThemedView
-                  className="w-full"
-                  lightColor="transparent"
-                  darkColor="transparent"
-                >
-                  <ThemedView
-                    className="flex flex-col px-2 mb-2"
-                    lightColor="transparent"
-                    darkColor="transparent"
-                  >
-                    <ThemedText className="font-bold text-xl">
-                      Description
-                    </ThemedText>
-                    <ThemedText>{company?.description}</ThemedText>
-                  </ThemedView>
-                  <ThemedView
-                    className="flex flex-col px-2 mb-2"
-                    lightColor="transparent"
-                    darkColor="transparent"
-                  >
-                    <ThemedText className="font-bold text-xl">
-                      Company Culture
-                    </ThemedText>
-                    <ThemedText>Lorem ipsum</ThemedText>
-                  </ThemedView>
-                </ThemedView>
+                <View className="w-full">
+                  <View className="flex flex-col px-2 mb-2">
+                    <Text className="font-bold text-xl">Description</Text>
+                    <Text>{company?.description}</Text>
+                  </View>
+                  <View className="flex flex-col px-2 mb-2">
+                    <Text className="font-bold text-xl">Company Culture</Text>
+                    <Text></Text>
+                  </View>
+                </View>
               }
             />
-          </ThemedView>
-          <ThemedView
-            className="px-2 mb-2"
-            lightColor="transparent"
-            darkColor="transparent"
-          >
+          </View>
+          <View className="px-2 mb-2">
             <CustomButton>
               {company?.website_url ? (
                 <ExternalLink
@@ -192,7 +158,7 @@ const CompaniesView = () => {
                 <></>
               )}
             </CustomButton>
-          </ThemedView>
+          </View>
         </SafeAreaView>
       ) : (
         <Loader
@@ -200,7 +166,7 @@ const CompaniesView = () => {
           color={colorScheme === "light" ? "black" : "white"}
         />
       )}
-    </ThemedView>
+    </View>
   );
 };
 

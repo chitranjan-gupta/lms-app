@@ -1,12 +1,8 @@
-import {
-  TouchableOpacity,
-  ActivityIndicator,
-  useColorScheme,
-} from "react-native";
+import { useColorScheme } from "nativewind";
 
-import { ThemedText } from "@/components/ThemedText";
+import { TouchableOpacity, ActivityIndicator, Text } from "@/ui";
 
-import type { ButtonProps } from "@/types/type";
+import type { ButtonProps } from "@/types";
 
 const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
   switch (variant) {
@@ -38,7 +34,7 @@ const getTextVariantStyle = (variant: ButtonProps["textVariant"]) => {
   }
 };
 
-const CustomButton = ({
+export const CustomButton = ({
   onPress,
   title,
   bgVariant = "primary",
@@ -50,20 +46,20 @@ const CustomButton = ({
   children,
   ...props
 }: ButtonProps) => {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`w-full rounded-full p-3 flex flex-row justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(bgVariant)} ${className}`}
+      className={`w-full rounded-full p-3 flex flex-row justify-center items-center ${getBgVariantStyle(bgVariant)} ${className}`}
       {...props}
     >
       {IconLeft && <IconLeft />}
       {title && (
-        <ThemedText
+        <Text
           className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}
         >
           {title}
-        </ThemedText>
+        </Text>
       )}
       {children}
       {isLoading && (
@@ -76,5 +72,3 @@ const CustomButton = ({
     </TouchableOpacity>
   );
 };
-
-export default CustomButton;

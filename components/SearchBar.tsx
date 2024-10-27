@@ -1,48 +1,83 @@
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { Image } from "expo-image";
-import { Pressable, TextInput } from "react-native";
+import { TextInput } from "react-native";
 
-import { ThemedView } from "@/components/ThemedView";
-import { icons } from "@/constants";
 import { shadowStyle } from "@/styles";
+import { Pressable, View, AntDesign, Feather } from "@/ui";
+
+import type { Dispatch, SetStateAction } from "react";
+
+interface SearchBarProps {
+  onPress: () => void;
+  placeholder: string;
+  query: string;
+  setQuery: Dispatch<SetStateAction<string>>;
+}
 
 export const SearchBar = ({
   onPress,
   placeholder,
-}: {
-  onPress: () => void;
-  placeholder: string;
-}) => {
+  query,
+  setQuery,
+}: SearchBarProps) => {
   return (
-    <ThemedView
-      className="w-full px-5"
-      lightColor="transparent"
-      darkColor="black"
-    >
-      <ThemedView
-        className="w-full flex flex-row justify-start items-center gap-x-5"
-        lightColor="transparent"
-        darkColor="black"
-      >
-        <ThemedView
-          className="flex flex-row justify-start items-center bg-gray-200 rounded-lg border border-gray-200"
+    <View className="w-full px-5">
+      <View className="w-full flex flex-row justify-start items-center gap-x-5">
+        <View
+          className="flex flex-row justify-start items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
           style={shadowStyle.shadowBlack}
         >
-          <Image source={icons.search} className={`w-6 h-6 ml-3`} />
+          <View className="ml-3">
+            <Feather name="search" size={24} color="black" />
+          </View>
           <TextInput
-            className={`rounded-full p-4 font-bold text-[15px] w-2/3 text-left`}
+            className={`rounded-full p-4 font-bold text-[15px] w-[75%] text-left`}
             placeholder={placeholder}
+            value={query}
+            onChangeText={(text) => setQuery(text)}
           />
-        </ThemedView>
-        <ThemedView
-          className="w-16 h-full flex flex-row justify-center items-center bg-gray-200 rounded-lg border border-gray-200"
+        </View>
+        <View
+          className="w-16 h-full flex flex-row justify-center items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
           style={shadowStyle.shadowBlack}
         >
           <Pressable onPress={onPress}>
             <AntDesign name="filter" size={24} color="black" />
           </Pressable>
-        </ThemedView>
-      </ThemedView>
-    </ThemedView>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+interface MockSearchBarProps {
+  onPress: () => void;
+  placeholder: string;
+}
+export const MockSearchBar = ({ onPress, placeholder }: MockSearchBarProps) => {
+  return (
+    <View className="w-full px-5">
+      <Pressable className="w-full" onPress={onPress}>
+        <View className="w-full flex flex-row justify-start items-center gap-x-5">
+          <View
+            className="flex flex-row justify-start items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
+            style={shadowStyle.shadowBlack}
+          >
+            <View className="ml-3">
+              <Feather name="search" size={24} color="black" />
+            </View>
+            <TextInput
+              className={`rounded-full p-4 font-bold text-[15px] w-[80%] text-left`}
+              placeholder={placeholder}
+              editable={false}
+            />
+          </View>
+          <View
+            className="w-16 h-full flex flex-row justify-center items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
+            style={shadowStyle.shadowBlack}
+          >
+            <AntDesign name="filter" size={24} color="black" />
+          </View>
+        </View>
+      </Pressable>
+    </View>
   );
 };

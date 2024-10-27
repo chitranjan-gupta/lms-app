@@ -1,16 +1,21 @@
 import { useStripe } from "@stripe/stripe-react-native";
 import { router } from "expo-router";
-import React, { useState } from "react";
-import { Alert, Image } from "react-native";
+import { useState } from "react";
+import { Alert } from "react-native";
 import { ReactNativeModal } from "react-native-modal";
 
 import { client } from "@/api/common/client";
-import CustomButton from "@/components/CustomButton";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { images } from "@/constants";
+import { View, Text, Image } from "@/ui";
 
-const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
+import { CustomButton } from "./CustomButton";
+
+interface PaymentProps {
+  courseid: string;
+  price: number;
+}
+
+export const Payment = ({ courseid, price }: PaymentProps) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [success, setSuccess] = useState<boolean>(false);
 
@@ -75,7 +80,7 @@ const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
   };
 
   return (
-    <>
+    <View>
       <CustomButton
         title="Buy Now"
         className="absolute mx-2 bottom-[60px]"
@@ -86,16 +91,16 @@ const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
         isVisible={success}
         onBackdropPress={() => setSuccess(false)}
       >
-        <ThemedView className="flex flex-col items-center justify-center bg-white p-7 rounded-2xl">
+        <View className="flex flex-col items-center justify-center bg-white p-7 rounded-2xl">
           <Image source={images.check} className="w-28 h-28 mt-5" />
 
-          <ThemedText className="text-2xl text-center font-bold mt-5">
+          <Text className="text-2xl text-center font-bold mt-5">
             Payment Success
-          </ThemedText>
+          </Text>
 
-          <ThemedText className="text-md text-blue-300 font-semibold text-center mt-3">
+          <Text className="text-md text-blue-300 font-semibold text-center mt-3">
             Thank you.
-          </ThemedText>
+          </Text>
 
           <CustomButton
             title="Back Home"
@@ -105,10 +110,8 @@ const Payment = ({ courseid, price }: { courseid: string; price: number }) => {
             }}
             className="mt-5"
           />
-        </ThemedView>
+        </View>
       </ReactNativeModal>
-    </>
+    </View>
   );
 };
-
-export default Payment;

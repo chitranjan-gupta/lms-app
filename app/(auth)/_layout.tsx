@@ -37,12 +37,14 @@ const Layout = () => {
   }
 
   return (
-    <Stack>
+    <Stack initialRouteName="(tabs)">
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="(courses)" options={{ headerShown: false }} />
       <Stack.Screen name="(jobs)" options={{ headerShown: false }} />
       <Stack.Screen name="(companies)" options={{ headerShown: false }} />
       <Stack.Screen name="(chats)" options={{ headerShown: false }} />
+      <Stack.Screen name="(settings)" options={{ headerShown: false }} />
+      <Stack.Screen name="(search)" options={{ headerShown: false }} />
     </Stack>
   );
 };

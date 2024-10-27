@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 import { client } from "@/api/common/client";
-import { Chapter } from "@/types/type";
+import { Chapter } from "@/types";
 
 interface ChapterState {
   status: "idle" | "pending";

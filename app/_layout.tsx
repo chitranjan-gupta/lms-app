@@ -1,9 +1,7 @@
+import "expo-dev-client";
 import "@/styles/globals.css";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -12,10 +10,13 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { APIProvider } from "@/api/common/api-provider";
 import { hydrateAuth } from "@/core/auth";
-import { useColorScheme } from "@/core/hooks/useColorScheme";
+import { loadSelectedTheme } from "@/core/hooks/use-selected-theme";
+import { useThemeConfig } from "@/core/hooks/use-theme-config";
 import { hydrateFirstTime } from "@/core/store/use-first";
+import "@/core/i18n";
 import "react-native-reanimated";
 
+loadSelectedTheme();
 hydrateFirstTime();
 hydrateAuth();
 
@@ -23,7 +24,7 @@ hydrateAuth();
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const theme = useThemeConfig();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -39,17 +40,19 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <APIProvider>
-        <GestureHandlerRootView>
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(unauth)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </GestureHandlerRootView>
-      </APIProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView className={theme.dark ? "dark" : undefined}>
+      <ThemeProvider value={theme}>
+        <APIProvider>
+          <BottomSheetModalProvider>
+            <Stack initialRouteName="(auth)">
+              {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(unauth)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </BottomSheetModalProvider>
+        </APIProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

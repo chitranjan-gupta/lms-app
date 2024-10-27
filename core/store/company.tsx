@@ -4,7 +4,7 @@ import { devtools } from "zustand/middleware";
 
 import { config } from "@/constants";
 import { databases } from "@/lib/appwrite";
-import { Company } from "@/types/type";
+import { Company } from "@/types";
 
 interface FetchState {
   companyId: string;

@@ -1,46 +1,44 @@
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import BottomSheet from "@gorhom/bottom-sheet";
-import { useEffect, useRef, useState } from "react";
-import { Pressable, useColorScheme } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import { useColorScheme } from "nativewind";
+// import { useState } from "react";
 
-import { Categories } from "@/components/Categories";
-import { FeaturedCourses, RecentCourses } from "@/components/Courses";
-import { Filter } from "@/components/Filter";
-import { Loader } from "@/components/Loader";
-import { SearchBar } from "@/components/SearchBar";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import {
+  // Categories,
+  // FeaturedCourses,
+  // RecentCourses,
+  Loader,
+  MockSearchBar,
+  Maintenance,
+} from "@/components";
 import { useCategories } from "@/core/store/categories";
 import { useCourses } from "@/core/store/courses";
+import {
+  // Pressable,
+  SafeAreaView,
+  Text,
+  View,
+  // MaterialCommunityIcons,
+  FocusAwareStatusBar,
+} from "@/ui";
 
 const Courses = () => {
-  const colorScheme = useColorScheme();
-  const courses = useCourses((state) => state.courses);
+  const { colorScheme } = useColorScheme();
+  // const courses = useCourses((state) => state.courses);
   const loading = useCourses((state) => state.status);
-  const categories = useCategories((state) => state.categories);
+  // const categories = useCategories((state) => state.categories);
   const isPending = useCategories((state) => state.status);
-  const [durations, setDurations] = useState<string[]>([]);
-  const [filterCategories, setFilterCategories] = useState<boolean>(false);
-  const [sortCalendar, setSortCalendar] = useState<boolean>(false);
-  const [sortAlphabetic, setSortAlphabetic] = useState(false);
-  const [sortClock, setSortClock] = useState(false);
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  // const [filterCategories, setFilterCategories] = useState<boolean>(false);
+  // const [sortCalendar, setSortCalendar] = useState<boolean>(false);
+  // const [sortAlphabetic, setSortAlphabetic] = useState(false);
+  // const [sortClock, setSortClock] = useState(false);
 
-  useEffect(() => {
-    setDurations([
-      "3-8 Hours",
-      "8-14 Hours",
-      "14-20 Hours",
-      "20-24 Hours",
-      "24-30 Hours",
-    ]);
-  }, [setDurations]);
+  const handlePress = () => {
+    router.push("/(auth)/(search)");
+  };
 
-  const handleClosePress = () => bottomSheetRef.current?.close();
-  const handleOpenPress = () => bottomSheetRef.current?.expand();
   return (
-    <ThemedView className="w-full h-full" lightColor="white" darkColor="black">
+    <View className="w-full h-full">
+      <FocusAwareStatusBar />
       {loading === "pending" && isPending === "pending" ? (
         <Loader
           variant={"large"}
@@ -48,48 +46,25 @@ const Courses = () => {
         />
       ) : (
         <SafeAreaView className="w-full h-full">
-          <ThemedView
-            className="w-full px-5 my-2"
-            lightColor="transparent"
-            darkColor="black"
-          >
-            <ThemedView
-              className="w-full flex flex-row items-center justify-between"
-              lightColor="transparent"
-              darkColor="black"
-            >
-              <ThemedText className="text-3xl font-extrabold">
-                Find Your Courses
-              </ThemedText>
-            </ThemedView>
-          </ThemedView>
-          <SearchBar
-            onPress={handleOpenPress}
+          <View className="w-full px-5 my-2">
+            <View className="w-full flex flex-row items-center justify-between">
+              <Text className="text-3xl font-extrabold">Find Your Courses</Text>
+            </View>
+          </View>
+          <MockSearchBar
+            onPress={handlePress}
             placeholder="Search Your Course"
           />
-          <ThemedView
-            className="w-full px-5 flex flex-row items-center justify-between"
-            lightColor="transparent"
-            darkColor="black"
-          >
-            <ThemedText className="text-2xl font-bold">
-              Popular Courses
-            </ThemedText>
+          <Maintenance />
+          {/* <View className="w-full px-5 flex flex-row items-center justify-between">
+            <Text className="text-2xl font-bold">Popular Courses</Text>
             <Pressable>
-              <ThemedText className="text-xs font-bold text-green-500">
-                See all
-              </ThemedText>
+              <Text className="text-xs font-bold text-green-500">See all</Text>
             </Pressable>
-          </ThemedView>
+          </View>
           <FeaturedCourses courses={courses} loading={loading} />
-          <ThemedView
-            className="w-full px-5 flex flex-row items-center justify-between"
-            lightColor="transparent"
-            darkColor="black"
-          >
-            <ThemedText className="text-2xl font-bold mb-2">
-              Categories
-            </ThemedText>
+          <View className="w-full px-5 flex flex-row items-center justify-between">
+            <Text className="text-2xl font-bold mb-2">Categories</Text>
             <Pressable onPress={() => setFilterCategories((prev) => !prev)}>
               <MaterialCommunityIcons
                 name={
@@ -101,21 +76,11 @@ const Courses = () => {
                 color={colorScheme === "light" ? "black" : "white"}
               />
             </Pressable>
-          </ThemedView>
+          </View>
           <Categories categories={categories} loading={isPending} />
-          <ThemedView
-            className="w-full px-5 flex flex-row items-center justify-between"
-            lightColor="transparent"
-            darkColor="black"
-          >
-            <ThemedText className="text-2xl font-bold mb-3">
-              Recent Courses
-            </ThemedText>
-            <ThemedView
-              className="flex flex-row"
-              lightColor="transparent"
-              darkColor="black"
-            >
+          <View className="w-full px-5 flex flex-row items-center justify-between">
+            <Text className="text-2xl font-bold mb-3">Recent Courses</Text>
+            <View className="flex flex-row">
               <Pressable onPress={() => setSortCalendar((prev) => !prev)}>
                 <MaterialCommunityIcons
                   name={
@@ -147,18 +112,12 @@ const Courses = () => {
                   color={colorScheme === "light" ? "black" : "white"}
                 />
               </Pressable>
-            </ThemedView>
-          </ThemedView>
-          <RecentCourses courses={courses} loading={loading} />
-          <Filter
-            ref={bottomSheetRef}
-            categories={categories}
-            handleClosePress={handleClosePress}
-            durations={durations}
-          />
+            </View>
+          </View>
+          <RecentCourses courses={courses} loading={loading} /> */}
         </SafeAreaView>
       )}
-    </ThemedView>
+    </View>
   );
 };
 

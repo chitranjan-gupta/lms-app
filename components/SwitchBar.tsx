@@ -1,4 +1,3 @@
-import { Pressable } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
@@ -7,6 +6,8 @@ import Animated, {
   withTiming,
   SharedValue,
 } from "react-native-reanimated";
+
+import { Pressable } from "@/ui";
 
 interface SwitchBarProps {
   value: SharedValue<boolean>;
@@ -75,10 +76,10 @@ export const SwitchBar = ({
             {`${!isActive ? "About" : "Work"} Google`}
           </Animated.Text>
         </Animated.View>
-        <Animated.Text className="text-black text-center -top-7 self-start left-10 z-0">
+        <Animated.Text className="text-black text-center self-start z-0 -mt-8 ml-10">
           About Google
         </Animated.Text>
-        <Animated.Text className="text-black text-center -top-11 right-12 self-end z-0">
+        <Animated.Text className="text-black text-center self-end z-0 -mt-5 mr-10">
           Work Google
         </Animated.Text>
       </Animated.View>

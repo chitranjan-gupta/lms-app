@@ -3,7 +3,7 @@ import { devtools } from "zustand/middleware";
 
 import { client } from "@/api/common/client";
 
-import type { Category } from "@/types/type";
+import type { Category } from "@/types";
 
 interface CategoriesState {
   status: "idle" | "pending";

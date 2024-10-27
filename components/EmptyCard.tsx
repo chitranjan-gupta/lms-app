@@ -1,30 +1,28 @@
-import { Image } from "expo-image";
-import { ActivityIndicator, useColorScheme } from "react-native";
+import { useColorScheme } from "nativewind";
 
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { images } from "@/constants";
+import { Text, View, Image } from "@/ui";
+
+import { Loader } from "./Loader";
+
+interface EmptyCardProps {
+  loading: string;
+  title: string;
+  isImage?: boolean;
+  imageUrl?: string;
+}
 
 export const EmptyCard = ({
   loading,
   title,
   isImage,
   imageUrl,
-}: {
-  loading: string;
-  title: string;
-  isImage?: boolean;
-  imageUrl?: string;
-}) => {
-  const colorScheme = useColorScheme();
+}: EmptyCardProps) => {
+  const { colorScheme } = useColorScheme();
   return (
-    <ThemedView
-      className="flex flex-col items-center justify-center"
-      lightColor="transparent"
-      darkColor="transparent"
-    >
+    <View className="flex flex-col items-center justify-center">
       {!(loading === "idle") ? (
-        <ThemedView>
+        <View>
           {isImage ? (
             <Image
               source={imageUrl || images.noResult}
@@ -35,14 +33,14 @@ export const EmptyCard = ({
           ) : (
             <></>
           )}
-          <ThemedText className="text-sm">{title}</ThemedText>
-        </ThemedView>
+          <Text className="text-sm">{title}</Text>
+        </View>
       ) : (
-        <ActivityIndicator
-          size="small"
+        <Loader
+          variant="small"
           color={colorScheme === "light" ? "black" : "white"}
         />
       )}
-    </ThemedView>
+    </View>
   );
 };

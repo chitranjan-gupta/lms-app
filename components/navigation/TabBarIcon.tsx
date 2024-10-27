@@ -1,26 +1,14 @@
-import Feather from "@expo/vector-icons/Feather";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import React from "react";
-import { Image, ImageSourcePropType } from "react-native";
+import {
+  View,
+  Ionicons,
+  FontAwesome,
+  Feather,
+  MaterialIcons,
+  Entypo,
+  Image,
+} from "@/ui";
 
-import { ThemedView } from "@/components/ThemedView";
-
-export enum IconType {
-  fontawesome = "fontawesome",
-  ionicons = "ionicons",
-  feather = "feather",
-  image = "image",
-}
-
-interface TabBarProps {
-  focused: boolean;
-  name: string;
-  color: string;
-  icontype: "fontawesome" | "ionicons" | "feather" | "materialicons" | "image";
-  source?: ImageSourcePropType;
-}
+import type { TabBarProps } from "@/types";
 
 export function TabBarIcon({
   focused,
@@ -62,12 +50,20 @@ export function TabBarIcon({
           size={24}
         />
       );
+    } else if (icontype === "entypo" && name in Entypo.glyphMap) {
+      return (
+        <Entypo
+          name={name as keyof typeof Entypo.glyphMap}
+          color={color}
+          size={24}
+        />
+      );
     } else if (icontype === "image" && source) {
       return (
         <Image
           source={source}
           tintColor={color}
-          resizeMode="contain"
+          contentFit="contain"
           className="w-7 h-7"
         />
       );
@@ -76,16 +72,14 @@ export function TabBarIcon({
   };
 
   return (
-    <ThemedView
+    <View
       className={`flex flex-row justify-center items-center rounded-full ${focused ? "bg-blue-300" : ""}`}
     >
-      <ThemedView
+      <View
         className={`rounded-full w-12 h-12 items-center justify-center ${focused ? "bg-blue-400" : ""}`}
-        darkColor="#000"
-        lightColor="#000"
       >
         {renderIcon()}
-      </ThemedView>
-    </ThemedView>
+      </View>
+    </View>
   );
 }

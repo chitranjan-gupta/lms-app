@@ -1,37 +1,47 @@
-import Feather from "@expo/vector-icons/Feather";
-import Octicons from "@expo/vector-icons/Octicons";
 import {
   KanbanBoard,
   ColumnModel,
   CardModel,
 } from "@intechnity/react-native-kanban-board";
 import { useMemo, useState } from "react";
-import { Alert, Button, useColorScheme } from "react-native";
-import { SelectList } from "react-native-dropdown-select-list";
-import { ReactNativeModal } from "react-native-modal";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-import CustomButton from "@/components/CustomButton";
-import InputField from "@/components/InputField";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { ColumnModal, RowModal } from "@/components";
 import { useColumns } from "@/core/store/columns";
 import { useRows } from "@/core/store/rows";
 import { camelCase } from "@/lib";
 import { kanbanStyles } from "@/styles";
+import {
+  SafeAreaView,
+  View,
+  FocusAwareStatusBar,
+  Button,
+  useModal,
+} from "@/ui";
+
+import type { KanbanColumn, KanbanRow } from "@/types";
 
 const JobBoard = () => {
-  const colorScheme = useColorScheme();
-
-  const [currentCard, setCurrentCard] = useState({
+  const initialCard: KanbanRow = {
     title: "",
     subtitle: "",
     columnId: "",
-  });
+    appliedDate: "",
+    rejectedDate: "",
+    notes: "",
+    tags: [],
+  };
+  const initialColumn: KanbanColumn = {
+    name: "",
+  };
 
-  const [showModal, setShowModal] = useState(false);
+  const rowmodal = useModal();
+  const columnmodal = useModal();
+  const [modalType, setModalType] = useState(false);
+  const [currentColumn, setCurrentColumn] = useState(initialColumn);
+  const [currentCard, setCurrentCard] = useState<KanbanRow>(initialCard);
 
   const newColumns = useColumns((state) => state.columns);
+  const addColumns = useColumns((state) => state.addColumns);
   const newRows = useRows((state) => state.rows);
   const addRows = useRows((state) => state.addRows);
   const updateRows = useRows((state) => state.updateRows);
@@ -50,7 +60,7 @@ const JobBoard = () => {
         .sort((a, b) => a.index - b.index)
         .map(
           (column) =>
-            new ColumnModel(column.$id, camelCase(column.name), column.index),
+            new ColumnModel(column.$id, camelCase(column.name), column),
         ),
     [newColumns],
   );
@@ -68,14 +78,14 @@ const JobBoard = () => {
               row.subtitle,
               "",
               [],
-              null,
+              row,
               row.index,
             ),
         ),
     [newRows],
   );
 
-  const addNewCard = async () => {
+  const addCard = async () => {
     await addRows([
       {
         title: currentCard.title,
@@ -84,10 +94,18 @@ const JobBoard = () => {
         index:
           newColumns.find((column) => column.$id === currentCard.columnId)
             ?.kanbanRow?.length! + 1,
+        appliedDate: currentCard.appliedDate,
+        rejectedDate: currentCard.rejectedDate,
+        notes: currentCard.notes,
+        tags: currentCard.tags,
       },
     ]);
-    setShowModal(false);
+    handleRowModalClose();
   };
+
+  const updateCard = async () => {};
+
+  const deleteCard = async () => {};
 
   const onCardDragEnd = async (
     srcColumn: ColumnModel,
@@ -194,103 +212,90 @@ const JobBoard = () => {
   };
 
   const onCardPress = (card: CardModel) => {
-    Alert.alert(`Card '$r{card.title}' pressed`);
+    setCurrentCard((prev) => ({
+      ...prev,
+      title: card.title,
+      subtitle: card.subtitle,
+      columnId: card.columnId,
+      appliedDate: card.item.appliedDate,
+      rejectedDate: card.item.rejectedDate,
+      notes: card.item.notes,
+      tags: card.item.tags,
+    }));
+    setModalType(true);
+    rowmodal.present();
+  };
+
+  const addColumn = async () => {
+    await addColumns([{ name: currentColumn.name, index: columns.length + 1 }]);
+  };
+
+  const updateColumn = async () => {};
+
+  const deleteColumn = async () => {};
+
+  const handleRowModalClose = () => {
+    rowmodal.dismiss();
+    setCurrentCard(initialCard);
+  };
+
+  const handleColumnModalClose = () => {
+    rowmodal.dismiss();
+    setCurrentColumn(initialColumn);
   };
 
   return (
-    <ThemedView className="w-full h-full" lightColor="white" darkColor="black">
-      <SafeAreaView className="flex-[1] items-center justify-center">
-        <ThemedView
-          className="mt-[20px]"
-          lightColor="transparent"
-          darkColor="transparent"
-        >
-          <Button onPress={() => setShowModal(true)} title="Add new card" />
-        </ThemedView>
+    <View className="w-full h-full">
+      <FocusAwareStatusBar />
 
-        <KanbanBoard
-          columns={columns}
-          cards={rows}
-          onDragEnd={onCardDragEnd}
-          onCardPress={onCardPress}
-          style={kanbanStyles.kanbanStyle}
-          columnHeaderContainerStyle={kanbanStyles.kanbanHeader}
-          cardContainerStyle={kanbanStyles.kanbanCard}
+      <SafeAreaView className="w-full h-full items-center justify-center">
+        <View className="mt-[30px] flex flex-row gap-x-2">
+          <Button
+            onPress={() => rowmodal.present()}
+            label="Add card"
+            className="border p-2 rounded-xl"
+          />
+          <Button
+            onPress={() => columnmodal.present()}
+            label="Add column"
+            className="border p-2 rounded-xl"
+          />
+        </View>
+        <View className="w-full h-full">
+          <KanbanBoard
+            columns={columns}
+            cards={rows}
+            onDragEnd={onCardDragEnd}
+            onCardPress={onCardPress}
+            style={kanbanStyles.kanbanStyle}
+            columnHeaderContainerStyle={kanbanStyles.kanbanHeader}
+            cardContainerStyle={kanbanStyles.kanbanCard}
+          />
+        </View>
+
+        <ColumnModal
+          modal={columnmodal}
+          currentColumn={currentColumn}
+          modalType={false}
+          setCurrentColumn={setCurrentColumn}
+          handleModalClose={handleColumnModalClose}
+          addColumn={addColumn}
+          updateColumn={updateColumn}
+          deleteColumn={deleteColumn}
         />
-
-        <ReactNativeModal
-          isVisible={showModal}
-          onModalHide={() => {
-            setShowModal(false);
-          }}
-        >
-          <ThemedView
-            className="py-2 px-5 rounded-xl flex flex-col"
-            lightColor="white"
-            darkColor="black"
-          >
-            <ThemedText className="text-xl font-bold">Add New Card</ThemedText>
-            <ThemedView
-              className="flex flex-col gap-y-1"
-              lightColor="transparent"
-              darkColor="transparent"
-            >
-              <ThemedView lightColor="transparent" darkColor="transparent">
-                <InputField
-                  label="Title"
-                  placeholder="Enter the title"
-                  IconLeft={
-                    <Feather
-                      name="user"
-                      size={24}
-                      color="black"
-                      style={{ marginLeft: 10 }}
-                    />
-                  }
-                  value={currentCard.title}
-                  onChangeText={(val) =>
-                    setCurrentCard((prev) => ({ ...prev, title: val }))
-                  }
-                />
-              </ThemedView>
-              <ThemedView lightColor="transparent" darkColor="transparent">
-                <InputField
-                  label="Company"
-                  placeholder="Enter the company"
-                  IconLeft={
-                    <Octicons
-                      name="organization"
-                      size={24}
-                      color="black"
-                      style={{ marginLeft: 10 }}
-                    />
-                  }
-                  value={currentCard.subtitle}
-                  onChangeText={(val) =>
-                    setCurrentCard((prev) => ({ ...prev, subtitle: val }))
-                  }
-                />
-              </ThemedView>
-              <ThemedText className="text-black">Choose the column</ThemedText>
-              <SelectList
-                setSelected={(val: string) =>
-                  setCurrentCard((prev) => ({ ...prev, columnId: val }))
-                }
-                data={data}
-                save="key"
-                inputStyles={{
-                  color: colorScheme === "light" ? "black" : "white",
-                }}
-                dropdownTextStyles={{
-                  color: colorScheme === "light" ? "black" : "white",
-                }}
-              />
-              <CustomButton onPress={addNewCard} title="Add" />
-            </ThemedView>
-          </ThemedView>
-        </ReactNativeModal>
+        <RowModal
+          modal={rowmodal}
+          modalType={modalType}
+          currentCard={currentCard}
+          data={data}
+          setCurrentCard={setCurrentCard}
+          handleModalClose={handleRowModalClose}
+          addCard={addCard}
+          updateCard={updateCard}
+          deleteCard={deleteCard}
+        />
       </SafeAreaView>
-    </ThemedView>
+    </View>
   );
 };
 

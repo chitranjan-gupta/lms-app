@@ -5,7 +5,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { ThemedView } from "@/components/ThemedView";
+import { View } from "@/ui";
 
 import type { ReactNode } from "react";
 
@@ -51,7 +51,7 @@ export const FlipCard = ({
   });
 
   return (
-    <ThemedView lightColor="transparent" darkColor="transparent">
+    <View>
       <Animated.View
         style={[
           flipCardStyles.regularCard,
@@ -70,7 +70,7 @@ export const FlipCard = ({
       >
         {FlippedContent}
       </Animated.View>
-    </ThemedView>
+    </View>
   );
 };
 
