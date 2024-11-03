@@ -1,7 +1,5 @@
-import { TextInput } from "react-native";
-
 import { shadowStyle } from "@/styles";
-import { Pressable, View, AntDesign, Feather } from "@/ui";
+import { Pressable, View, AntDesign, Feather, Input } from "@/ui";
 
 import type { Dispatch, SetStateAction } from "react";
 
@@ -22,14 +20,14 @@ export const SearchBar = ({
     <View className="w-full px-5">
       <View className="w-full flex flex-row justify-start items-center gap-x-5">
         <View
-          className="flex flex-row justify-start items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
+          className="w-[75%] flex flex-row justify-start items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
           style={shadowStyle.shadowBlack}
         >
           <View className="ml-3">
             <Feather name="search" size={24} color="black" />
           </View>
-          <TextInput
-            className={`rounded-full p-4 font-bold text-[15px] w-[75%] text-left`}
+          <Input
+            className={`rounded-full p-3 font-bold text-[15px] w-full text-left`}
             placeholder={placeholder}
             value={query}
             onChangeText={(text) => setQuery(text)}
@@ -58,14 +56,14 @@ export const MockSearchBar = ({ onPress, placeholder }: MockSearchBarProps) => {
       <Pressable className="w-full" onPress={onPress}>
         <View className="w-full flex flex-row justify-start items-center gap-x-5">
           <View
-            className="flex flex-row justify-start items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
+            className="flex flex-row w-[75%] justify-start items-center bg-[#E5E5E5] rounded-lg border border-[#E5E5E5]"
             style={shadowStyle.shadowBlack}
           >
             <View className="ml-3">
               <Feather name="search" size={24} color="black" />
             </View>
-            <TextInput
-              className={`rounded-full p-4 font-bold text-[15px] w-[80%] text-left`}
+            <Input
+              className={`rounded-full p-2 font-bold text-[15px] w-full text-left`}
               placeholder={placeholder}
               editable={false}
             />

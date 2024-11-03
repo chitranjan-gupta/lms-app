@@ -5,7 +5,7 @@ import { I18nManager, DevSettings, Platform } from "react-native";
 import RNRestart from "react-native-restart";
 
 import { useStorage } from "@/core/hooks/useStorage";
-import { getItem } from "@/core/storage";
+import { getItem, setItem } from "@/core/storage";
 
 import type { Language, resources } from "@/core/i18n/resources";
 import type { RecursiveKeyOf } from "@/core/i18n/types";
@@ -17,6 +17,9 @@ export type TxKeyPath = RecursiveKeyOf<DefaultLocale>;
 export const LOCAL = "local";
 
 export const getLanguage = async () => await getItem<string>(LOCAL);
+
+export const setLanguage = async (language: string) =>
+  await setItem<string>(LOCAL, language);
 
 export const translate = memoize(
   (key: TxKeyPath, options = undefined) =>

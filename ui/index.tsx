@@ -21,3 +21,5 @@ export * from "./input";
 export * from "./progress-bar";
 export * from "./icons";
 export * from "./checkbox";
+export * from "./list";
+export * from "./slider";

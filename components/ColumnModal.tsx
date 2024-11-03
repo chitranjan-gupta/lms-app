@@ -10,10 +10,11 @@ import {
   type ModalReturn,
   Entypo,
   Feather,
+  ScrollView,
 } from "@/ui";
 
 import { CustomButton } from "./CustomButton";
-import { InputField } from "./InputField";
+import { InputBox } from "./InputBox";
 
 import type { KanbanColumn } from "@/types";
 
@@ -55,7 +56,7 @@ export const ColumnModal = ({
         </View>
       </ReactNativeModal>
       <Modal ref={modal.ref} snapPoints={snapPoints}>
-        <View className="py-2 px-5 rounded-xl flex flex-col pb-10 bg-white dark:bg-black w-full h-full">
+        <ScrollView className="py-2 px-5 rounded-xl flex flex-col pb-10 bg-white dark:bg-black w-full h-full">
           <View className="flex flex-row justify-between items-center">
             <View>
               <Text className="text-xl font-bold">
@@ -70,7 +71,9 @@ export const ColumnModal = ({
           </View>
           <View className="flex flex-col gap-y-1 pb-10">
             <View>
-              <InputField
+              <InputBox
+                editable
+                numberOfLines={1}
                 label="Title"
                 placeholder="Enter the title"
                 IconLeft={
@@ -81,7 +84,7 @@ export const ColumnModal = ({
                     style={{ marginLeft: 10 }}
                   />
                 }
-                value={currentColumn.name}
+                defaultValue={currentColumn.name}
                 onChangeText={(val) =>
                   setCurrentColumn((prev) => ({ ...prev, name: val }))
                 }
@@ -100,7 +103,7 @@ export const ColumnModal = ({
               )}
             </View>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
     </View>
   );

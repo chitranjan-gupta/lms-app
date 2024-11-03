@@ -1,8 +1,10 @@
 import { useColorScheme } from "nativewind";
+import { useMemo } from "react";
 
-import { Loader } from "@/components";
+import { Loader, CustomImageCarousel } from "@/components";
 import { useAuth } from "@/core/auth";
 import { useInit } from "@/core/hooks/useInit";
+import { useCompanies } from "@/core/store/company";
 import { useUser } from "@/core/store/user";
 import {
   TouchableOpacity,
@@ -19,7 +21,13 @@ const Home = () => {
   const removeUser = useUser((state) => state.removeUser);
   const authStatus = useAuth((state) => state.isloading);
   const signOut = useAuth((state) => state.signOut);
+  const { companies } = useCompanies();
   const { loading } = useInit();
+
+  const customcompanies = useMemo(
+    () => companies.map((company) => ({ ...company, image: company.logo_url })),
+    [companies],
+  );
 
   const handleSignOut = async () => {
     removeUser();
@@ -48,6 +56,11 @@ const Home = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <CustomImageCarousel
+            data={customcompanies}
+            autoPlay={false}
+            pagination={false}
+          />
         </SafeAreaView>
       )}
     </View>

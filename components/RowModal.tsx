@@ -19,7 +19,7 @@ import {
 } from "@/ui";
 
 import { CustomButton } from "./CustomButton";
-import { InputField } from "./InputField";
+import { InputBox } from "./InputBox";
 
 import type { KanbanRow } from "@/types";
 
@@ -126,7 +126,7 @@ export const RowModal = ({
           </View>
           <View className="flex flex-col gap-y-1 pb-10">
             <View>
-              <InputField
+              <InputBox
                 label="Title"
                 placeholder="Enter the title"
                 IconLeft={
@@ -144,7 +144,7 @@ export const RowModal = ({
               />
             </View>
             <View>
-              <InputField
+              <InputBox
                 label="Company"
                 placeholder="Enter the company"
                 IconLeft={

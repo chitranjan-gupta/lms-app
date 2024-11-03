@@ -1,12 +1,14 @@
+import axios from "axios";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { signin } from "@/core/auth";
-import { AppWriteCreateUser, AppWriteCurrentUser } from "@/lib/appwrite";
+import { client } from "@/api/common/client";
+import { BASE_URL } from "@/constants";
 
 import type { User } from "@/types";
 
 interface SignUpState {
+  name: string;
   email: string;
   username: string;
   password: string;
@@ -32,26 +34,14 @@ export const useUser = create<UserState>()(
     user: null,
     setUser: async (data: SignUpState) => {
       try {
-        set({ status: "pending", error: "" });
-        const response = await AppWriteCreateUser(
-          data.email,
-          data.password,
-          data.username,
-        );
-        if (response) {
-          set({
-            status: "idle",
-            user: {
-              userId: response.accountId,
-              email: response.email,
-              username: response.username,
-            } as unknown as User,
-          });
-          signin();
+        set({ status: "pending" });
+        const response = await axios.post(`${BASE_URL}/user/signup`, data);
+        if (response.status === 200) {
+          set({ status: "idle", user: response.data });
         }
       } catch (e: any) {
-        console.log(e);
-        set({ error: e.message });
+        console.log(e.response);
+        set({ error: e.response.data.message });
       } finally {
         set({ status: "idle" });
       }
@@ -59,18 +49,9 @@ export const useUser = create<UserState>()(
     getUser: async () => {
       try {
         set({ status: "pending" });
-        const response = await AppWriteCurrentUser();
-        if (response) {
-          set((state) => ({
-            status: "idle",
-            user: {
-              id: response.$id,
-              username: response.username,
-              email: response.email,
-              userId: response.accountId,
-            } as unknown as User,
-          }));
-          return;
+        const response = await client.get(`user/auth`);
+        if (response.status === 200) {
+          set({ status: "idle", user: response.data });
         }
       } catch (e) {
         console.log(e);
@@ -80,15 +61,15 @@ export const useUser = create<UserState>()(
     },
     getPurchase: async (courseid) => {
       try {
-        // const response = await client.post(`purchases`, {
-        //   userId: (get().user! as any).userId,
-        //   courseId: courseid,
-        // });
-        // if (response.status === 200) {
-        //   if (response.data.courseId === courseid) {
-        //     set({ status: "idle", isPurchased: response.data.courseId });
-        //   }
-        // }
+        const response = await client.post(`purchases`, {
+          userId: (get().user! as any).userId,
+          courseId: courseid,
+        });
+        if (response.status === 200) {
+          if (response.data.courseId === courseid) {
+            set({ status: "idle", isPurchased: response.data.courseId });
+          }
+        }
       } catch (e) {
         console.log(e);
       } finally {
@@ -115,5 +96,4 @@ export const useUser = create<UserState>()(
 export const removeUser = () => useUser.getState().removeUser();
 export const setUser = (user: User) => useUser.getState().setUser(user);
 export const getUser = () => useUser.getState().getUser();
-export const currentUser = () => useUser.getState().user;
 export const hydrateUser = () => useUser.getState().hydrate();

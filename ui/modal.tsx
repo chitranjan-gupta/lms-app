@@ -48,6 +48,7 @@ import type {
   BottomSheetModalProps,
 } from "@gorhom/bottom-sheet";
 import type { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+export type { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
 type ModalProps = BottomSheetModalProps & {
   title?: string;

@@ -1,4 +1,4 @@
-import { FlatList } from "@/ui";
+import { List } from "@/ui";
 
 import { EmptyCard } from "../EmptyCard";
 
@@ -14,22 +14,21 @@ interface FeaturedCoursesProps {
 
 export const FeaturedCourses = ({ courses, loading }: FeaturedCoursesProps) => {
   return (
-    <FlatList
+    <List
       data={courses}
       renderItem={({ item, index }) => <CourseCardView item={item} />}
-      style={{
-        height: 280,
-        flexGrow: 0,
-        marginTop: 5,
+      contentContainerStyle={{
+        paddingHorizontal: 16,
+        paddingBottom: 16,
       }}
       keyExtractor={(item, index) => index.toString()}
-      className="px-4 w-full"
       keyboardShouldPersistTaps="handled"
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       ListEmptyComponent={() => (
         <EmptyCard title="No courses found" loading={loading} />
       )}
+      estimatedItemSize={10}
     />
   );
 };
@@ -41,19 +40,20 @@ interface RecentCoursesProps {
 
 export const RecentCourses = ({ courses, loading }: RecentCoursesProps) => {
   return (
-    <FlatList
+    <List
       data={courses}
       renderItem={({ item }) => <CourseCard item={item} />}
       keyExtractor={(item, index) => index.toString()}
-      className="px-5"
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         paddingBottom: 100,
+        paddingHorizontal: 16,
       }}
       ListEmptyComponent={() => (
         <EmptyCard title="No courses found" loading={loading} isImage={true} />
       )}
+      estimatedItemSize={10}
     />
   );
 };

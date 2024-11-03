@@ -1,25 +1,16 @@
-import { useCallback, useMemo } from "react";
+import { useColorScheme } from "nativewind";
+import { useMemo } from "react";
 
-import {
-  type ColorSchemeType,
-  useSelectedTheme,
-} from "@/core/hooks/use-selected-theme";
 import { translate } from "@/core/i18n";
-import { View, useModal, type OptionType, Options } from "@/ui";
+import { View, useModal } from "@/ui";
+
+import { ThemeModal } from "../theme";
 
 import { Item } from "./item";
 
 export const ThemeItem = () => {
-  const { selectedTheme, setSelectedTheme } = useSelectedTheme();
+  const { colorScheme } = useColorScheme();
   const modal = useModal();
-
-  const onSelect = useCallback(
-    (option: OptionType) => {
-      setSelectedTheme(option.value as ColorSchemeType);
-      modal.dismiss();
-    },
-    [setSelectedTheme, modal],
-  );
 
   const themes = useMemo(
     () => [
@@ -31,8 +22,8 @@ export const ThemeItem = () => {
   );
 
   const theme = useMemo(
-    () => themes.find((t) => t.value === selectedTheme),
-    [selectedTheme, themes],
+    () => themes.find((t) => t.value === colorScheme),
+    [colorScheme, themes],
   );
 
   return (
@@ -42,12 +33,7 @@ export const ThemeItem = () => {
         value={theme?.label}
         onPress={modal.present}
       />
-      <Options
-        ref={modal.ref}
-        options={themes}
-        onSelect={onSelect}
-        value={theme?.value}
-      />
+      <ThemeModal ref={modal.ref} />
     </View>
   );
 };

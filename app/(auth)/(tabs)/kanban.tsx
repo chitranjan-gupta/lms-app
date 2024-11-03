@@ -3,11 +3,11 @@ import {
   ColumnModel,
   CardModel,
 } from "@intechnity/react-native-kanban-board";
+import { useColorScheme } from "nativewind";
 import { useMemo, useState } from "react";
 
 import { ColumnModal, RowModal } from "@/components";
-import { useColumns } from "@/core/store/columns";
-import { useRows } from "@/core/store/rows";
+import { useColumns, useRows } from "@/core/store/kanban";
 import { camelCase } from "@/lib";
 import { kanbanStyles } from "@/styles";
 import {
@@ -16,11 +16,14 @@ import {
   FocusAwareStatusBar,
   Button,
   useModal,
+  Fontisto,
+  Pressable,
 } from "@/ui";
 
 import type { KanbanColumn, KanbanRow } from "@/types";
 
 const JobBoard = () => {
+  const { colorScheme } = useColorScheme();
   const initialCard: KanbanRow = {
     title: "",
     subtitle: "",
@@ -29,6 +32,7 @@ const JobBoard = () => {
     rejectedDate: "",
     notes: "",
     tags: [],
+    kanbanColumnId: "",
   };
   const initialColumn: KanbanColumn = {
     name: "",
@@ -40,16 +44,18 @@ const JobBoard = () => {
   const [currentColumn, setCurrentColumn] = useState(initialColumn);
   const [currentCard, setCurrentCard] = useState<KanbanRow>(initialCard);
 
+  const getColumns = useColumns((state) => state.getColumns);
+  const columnState = useColumns((state) => state.status);
   const newColumns = useColumns((state) => state.columns);
-  const addColumns = useColumns((state) => state.addColumns);
+  const createColumn = useColumns((state) => state.addColumn);
   const newRows = useRows((state) => state.rows);
-  const addRows = useRows((state) => state.addRows);
-  const updateRows = useRows((state) => state.updateRows);
+  const addRow = useRows((state) => state.addRow);
+  const reorderRows = useRows((state) => state.changeOrderRows);
 
   const data = useMemo(
     () =>
       newColumns.map((column) => {
-        return { key: column.$id, value: column.name };
+        return { key: column.id, value: column.name };
       }),
     [newColumns],
   );
@@ -57,10 +63,10 @@ const JobBoard = () => {
   const columns = useMemo<ColumnModel[]>(
     () =>
       newColumns
-        .sort((a, b) => a.index - b.index)
+        .sort((a, b) => a.position - b.position)
         .map(
           (column) =>
-            new ColumnModel(column.$id, camelCase(column.name), column),
+            new ColumnModel(column.id, camelCase(column.name), column),
         ),
     [newColumns],
   );
@@ -68,38 +74,29 @@ const JobBoard = () => {
   const rows = useMemo<CardModel[]>(
     () =>
       newRows
-        .sort((a, b) => a.index - b.index)
+        .sort((a, b) => a.position - b.position)
         .map(
           (row) =>
             new CardModel(
-              row.$id,
-              row.kanbanColumn.$id,
+              row.id,
+              row.kanbanColumnId,
               row.title,
               row.subtitle,
               "",
               [],
               row,
-              row.index,
+              row.position,
             ),
         ),
     [newRows],
   );
 
   const addCard = async () => {
-    await addRows([
-      {
-        title: currentCard.title,
-        subtitle: currentCard.subtitle,
-        columnId: currentCard.columnId,
-        index:
-          newColumns.find((column) => column.$id === currentCard.columnId)
-            ?.kanbanRow?.length! + 1,
-        appliedDate: currentCard.appliedDate,
-        rejectedDate: currentCard.rejectedDate,
-        notes: currentCard.notes,
-        tags: currentCard.tags,
-      },
-    ]);
+    await addRow({
+      title: currentCard.title,
+      subtitle: currentCard.subtitle,
+      columnId: currentCard.columnId,
+    });
     handleRowModalClose();
   };
 
@@ -116,13 +113,13 @@ const JobBoard = () => {
     const updatedRows = [...newRows];
 
     // Find the index of the moved card and remove it from the source column
-    const itemIndex = updatedRows.findIndex((card) => card.$id === item.id);
+    const itemIndex = updatedRows.findIndex((card) => card.id === item.id);
     const [movedCard] = updatedRows.splice(itemIndex, 1);
 
     // Update the moved card's column
-    movedCard.kanbanColumn.$id = destColumn.id;
+    movedCard.kanbanColumnId = destColumn.id;
     // Set the index for the moved card based on its new position
-    movedCard.index = cardIdx + 1; // Set the index based on the new position
+    movedCard.position = cardIdx + 1; // Set the index based on the new position
 
     // Insert the moved card into the new position
     updatedRows.splice(cardIdx, 0, movedCard);
@@ -133,12 +130,13 @@ const JobBoard = () => {
       let start = 0;
       const affectedCards = updatedRows.reduce<typeof updatedRows>(
         (acc, card) => {
-          if (card.kanbanColumn.$id === srcColumn.id) {
-            if (card.$id !== movedCard.$id) {
+          if (card.kanbanColumnId === srcColumn.id) {
+            if (card.id !== movedCard.id) {
               // Push the card with the updated index only if it's not the moved card
               acc.push({
                 ...card,
-                index: movedCard.index !== start + 1 ? start + 1 : start + 2,
+                position:
+                  movedCard.position !== start + 1 ? start + 1 : start + 2,
               }); // Sequentially update indices starting from 1
               start++; // Increment start only when pushing an updated card
             } else {
@@ -160,13 +158,13 @@ const JobBoard = () => {
       // });
 
       // Update the rows state with the new configuration
-      await updateRows(affectedCards);
+      await reorderRows(affectedCards);
     } else {
       // Update indices for the source column
       const sourceColumnCards = updatedRows.reduce<typeof updatedRows>(
         (acc, card) => {
-          if (card.kanbanColumn.$id === srcColumn.id) {
-            acc.push({ ...card, index: acc.length + 1 }); // Sequentially update indices starting from 1
+          if (card.kanbanColumnId === srcColumn.id) {
+            acc.push({ ...card, position: acc.length + 1 }); // Sequentially update indices starting from 1
           }
           return acc;
         },
@@ -183,11 +181,12 @@ const JobBoard = () => {
       let start = 0;
       const destColumnCards = updatedRows.reduce<typeof updatedRows>(
         (acc, card) => {
-          if (card.kanbanColumn.$id === destColumn.id) {
-            if (card.$id !== movedCard.$id) {
+          if (card.kanbanColumnId === destColumn.id) {
+            if (card.id !== movedCard.id) {
               acc.push({
                 ...card,
-                index: movedCard.index !== start + 1 ? start + 1 : start + 2,
+                position:
+                  movedCard.position !== start + 1 ? start + 1 : start + 2,
               }); // Adjust for cards already in the destination
               start++; // Increment start only when pushing an updated card
             } else {
@@ -207,7 +206,7 @@ const JobBoard = () => {
       // });
 
       // Update the rows state with the new configuration
-      await updateRows([...sourceColumnCards, ...destColumnCards]);
+      await reorderRows([...sourceColumnCards, ...destColumnCards]);
     }
   };
 
@@ -227,7 +226,7 @@ const JobBoard = () => {
   };
 
   const addColumn = async () => {
-    await addColumns([{ name: currentColumn.name, index: columns.length + 1 }]);
+    await createColumn(currentColumn.name);
   };
 
   const updateColumn = async () => {};
@@ -237,6 +236,7 @@ const JobBoard = () => {
   const handleRowModalClose = () => {
     rowmodal.dismiss();
     setCurrentCard(initialCard);
+    setModalType(false);
   };
 
   const handleColumnModalClose = () => {
@@ -248,8 +248,8 @@ const JobBoard = () => {
     <View className="w-full h-full">
       <FocusAwareStatusBar />
 
-      <SafeAreaView className="w-full h-full items-center justify-center">
-        <View className="mt-[30px] flex flex-row gap-x-2">
+      <SafeAreaView className="w-full h-full">
+        <View className="relative flex flex-row gap-x-2">
           <Button
             onPress={() => rowmodal.present()}
             label="Add card"
@@ -261,7 +261,7 @@ const JobBoard = () => {
             className="border p-2 rounded-xl"
           />
         </View>
-        <View className="w-full h-full">
+        <View className="w-full h-full relative">
           <KanbanBoard
             columns={columns}
             cards={rows}
@@ -272,7 +272,21 @@ const JobBoard = () => {
             cardContainerStyle={kanbanStyles.kanbanCard}
           />
         </View>
-
+        <View
+          style={{ position: "absolute", bottom: 150, right: 20 }}
+          className="bg-black dark:bg-white p-5 rounded-full"
+        >
+          <Pressable
+            onPress={() => getColumns()}
+            disabled={columnState === "pending" ? true : false}
+          >
+            <Fontisto
+              name="cloud-refresh"
+              size={25}
+              color={colorScheme === "light" ? "white" : "black"}
+            />
+          </Pressable>
+        </View>
         <ColumnModal
           modal={columnmodal}
           currentColumn={currentColumn}

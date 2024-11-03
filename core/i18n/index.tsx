@@ -4,12 +4,17 @@ import { initReactI18next } from "react-i18next";
 import { I18nManager } from "react-native";
 
 import { resources } from "@/core/i18n/resources";
-import { getLanguage } from "@/core/i18n/utils";
+import { getLanguage, setLanguage } from "@/core/i18n/utils";
 export * from "@/core/i18n/utils";
 
 export const initI18n = async () => {
+  const storedLanguage = await getLanguage();
   const defaultLanguage =
-    (await getLanguage()) || getLocales()[0].languageCode || "en";
+    storedLanguage || getLocales()[0].languageCode || "en";
+
+  if (!storedLanguage) {
+    await setLanguage(defaultLanguage);
+  }
 
   await i18n.use(initReactI18next).init({
     resources,

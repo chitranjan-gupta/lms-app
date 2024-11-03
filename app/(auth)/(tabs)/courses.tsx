@@ -1,36 +1,35 @@
 import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
-// import { useState } from "react";
+import { useState } from "react";
 
 import {
-  // Categories,
-  // FeaturedCourses,
-  // RecentCourses,
+  Categories,
+  FeaturedCourses,
+  RecentCourses,
   Loader,
   MockSearchBar,
-  Maintenance,
 } from "@/components";
 import { useCategories } from "@/core/store/categories";
 import { useCourses } from "@/core/store/courses";
 import {
-  // Pressable,
+  Pressable,
   SafeAreaView,
   Text,
   View,
-  // MaterialCommunityIcons,
+  MaterialCommunityIcons,
   FocusAwareStatusBar,
 } from "@/ui";
 
 const Courses = () => {
   const { colorScheme } = useColorScheme();
-  // const courses = useCourses((state) => state.courses);
+  const courses = useCourses((state) => state.courses);
   const loading = useCourses((state) => state.status);
-  // const categories = useCategories((state) => state.categories);
+  const categories = useCategories((state) => state.categories);
   const isPending = useCategories((state) => state.status);
-  // const [filterCategories, setFilterCategories] = useState<boolean>(false);
-  // const [sortCalendar, setSortCalendar] = useState<boolean>(false);
-  // const [sortAlphabetic, setSortAlphabetic] = useState(false);
-  // const [sortClock, setSortClock] = useState(false);
+  const [filterCategories, setFilterCategories] = useState<boolean>(false);
+  const [sortCalendar, setSortCalendar] = useState<boolean>(false);
+  const [sortAlphabetic, setSortAlphabetic] = useState(false);
+  const [sortClock, setSortClock] = useState(false);
 
   const handlePress = () => {
     router.push("/(auth)/(search)");
@@ -55,15 +54,16 @@ const Courses = () => {
             onPress={handlePress}
             placeholder="Search Your Course"
           />
-          <Maintenance />
-          {/* <View className="w-full px-5 flex flex-row items-center justify-between">
+          <View className="w-full px-5 flex flex-row items-center justify-between">
             <Text className="text-2xl font-bold">Popular Courses</Text>
             <Pressable>
               <Text className="text-xs font-bold text-green-500">See all</Text>
             </Pressable>
           </View>
-          <FeaturedCourses courses={courses} loading={loading} />
-          <View className="w-full px-5 flex flex-row items-center justify-between">
+          <View className="py-4">
+            <FeaturedCourses courses={courses} loading={loading} />
+          </View>
+          <View className="w-full px-5 py-1 flex flex-row items-center justify-between">
             <Text className="text-2xl font-bold mb-2">Categories</Text>
             <Pressable onPress={() => setFilterCategories((prev) => !prev)}>
               <MaterialCommunityIcons
@@ -114,7 +114,7 @@ const Courses = () => {
               </Pressable>
             </View>
           </View>
-          <RecentCourses courses={courses} loading={loading} /> */}
+          <RecentCourses courses={courses} loading={loading} />
         </SafeAreaView>
       )}
     </View>

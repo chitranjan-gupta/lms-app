@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { APIProvider } from "@/api/common/api-provider";
+import { AnimatedAppLoader } from "@/components/SplashScreen";
 import { hydrateAuth } from "@/core/auth";
 import { loadSelectedTheme } from "@/core/hooks/use-selected-theme";
 import { useThemeConfig } from "@/core/hooks/use-theme-config";
@@ -40,19 +41,26 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView className={theme.dark ? "dark" : undefined}>
-      <ThemeProvider value={theme}>
-        <APIProvider>
-          <BottomSheetModalProvider>
-            <Stack initialRouteName="(auth)">
-              {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(unauth)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </BottomSheetModalProvider>
-        </APIProvider>
-      </ThemeProvider>
-    </GestureHandlerRootView>
+    <AnimatedAppLoader>
+      <GestureHandlerRootView
+        className={theme.dark ? "!bg-black" : "!bg-white"}
+      >
+        <ThemeProvider value={theme}>
+          <APIProvider>
+            <BottomSheetModalProvider>
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="(unauth)"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </BottomSheetModalProvider>
+          </APIProvider>
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </AnimatedAppLoader>
   );
 }

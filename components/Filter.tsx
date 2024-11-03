@@ -1,4 +1,4 @@
-import Slider from "@react-native-community/slider";
+// import Slider from "@react-native-community/slider";
 import { useColorScheme } from "nativewind";
 import { useState } from "react";
 
@@ -10,6 +10,7 @@ import {
   Modal,
   type ModalReturn,
   AntDesign,
+  Slider,
 } from "@/ui";
 
 import type { Category } from "@/types";
@@ -28,10 +29,21 @@ export const Filter = ({
   durations,
 }: FilterProps) => {
   const { colorScheme } = useColorScheme();
-  const [priceSlider, setPriceSlider] = useState<number>(90);
+  const MIN = 0;
+  const MAX = 5000;
+  const STEP = 100;
+  const [priceRange, setPriceRange] = useState({
+    min: MIN,
+    max: MAX,
+  });
 
   return (
-    <Modal ref={modal.ref}>
+    <Modal
+      ref={modal.ref}
+      backgroundStyle={{
+        backgroundColor: colorScheme === "dark" ? "black" : "white",
+      }}
+    >
       <View className="p-2 w-full h-full flex flex-col bg-white dark:bg-black">
         <View className="w-full flex flex-row justify-start items-start gap-x-[120px]">
           <Pressable
@@ -68,12 +80,26 @@ export const Filter = ({
             />
           </View>
         )}
-        <View className="flex flex-col my-3">
-          <View>
-            <Text className="text-lg font-black">Price</Text>
+        <View className="flex flex-col my-3 p-2">
+          <View className="flex flex-row gap-x-2">
+            <View style={{ width: 200 }}>
+              <Text className="text-lg font-black">{`Min Price: ${priceRange.min}`}</Text>
+            </View>
+            <View style={{ width: 200 }}>
+              <Text className="text-lg font-black">{`Max Price: ${priceRange.max}`}</Text>
+            </View>
           </View>
           <View className="w-full">
-            <Slider
+            <View className="p-2">
+              <Slider
+                sliderWidth={300}
+                min={MIN}
+                max={MAX}
+                step={STEP}
+                onValueChange={(range) => setPriceRange(range)}
+              />
+            </View>
+            {/* <Slider
               minimumValue={0}
               maximumValue={20000}
               value={priceSlider}
@@ -82,7 +108,7 @@ export const Filter = ({
               maximumTrackTintColor={colorScheme === "light" ? "blue" : "white"}
               minimumTrackTintColor={colorScheme === "light" ? "blue" : "white"}
               style={{ width: "100%", height: 40 }}
-            />
+            /> */}
           </View>
         </View>
         {durations && (

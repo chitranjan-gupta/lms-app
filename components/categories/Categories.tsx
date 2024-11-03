@@ -1,4 +1,4 @@
-import { FlatList } from "@/ui";
+import { List } from "@/ui";
 
 import { EmptyCard } from "../EmptyCard";
 
@@ -13,23 +13,22 @@ interface CategoriesProps {
 
 export const Categories = ({ categories, loading }: CategoriesProps) => {
   return (
-    <FlatList
+    <List
       data={categories}
       renderItem={({ item, index }) => (
         <CategoryCard item={item} index={index} />
       )}
-      style={{
-        height: 80,
-        flexGrow: 0,
+      contentContainerStyle={{
+        paddingHorizontal: 16,
       }}
       keyExtractor={(item, index) => index.toString()}
-      className="px-5 w-full"
       keyboardShouldPersistTaps="handled"
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       ListEmptyComponent={() => (
         <EmptyCard title="No categories found" loading={loading} />
       )}
+      estimatedItemSize={10}
     />
   );
 };

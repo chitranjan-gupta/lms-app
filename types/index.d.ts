@@ -1,9 +1,22 @@
+import type { ImageSource } from "expo-image";
+import type { AnimationObject } from "lottie-react-native";
 import type { ReactNode } from "react";
 import type {
   TextInputProps,
   TouchableOpacityProps,
   ImageSourcePropType,
 } from "react-native";
+
+declare interface Onboarding {
+  id: number;
+  animation?: AnimationObject;
+  image?: ImageSourcePropType | ImageSource;
+  title: string;
+  description: string;
+  descriptionColor: string;
+  textColor: string;
+  backgroundColor: string;
+}
 
 declare interface Verification {
   state: string;
@@ -12,6 +25,7 @@ declare interface Verification {
 }
 
 declare interface SignUpForm {
+  name: string;
   username: string;
   email: string;
   password: string;
@@ -207,19 +221,19 @@ declare interface StripeCustomer {
 }
 
 declare interface Company {
-  $id: string;
+  id: string;
   name: string;
   industry: string;
   location: string;
   website_url: string;
   logo_url?: string;
   description?: string;
-  jobs: Job[];
+  careers: Career[];
   $createdAt: string;
   $updatedAt: string;
 }
 
-declare enum JOB_TYPE {
+declare enum CAREER_TYPE {
   FULL_TIME = "Full-Time",
   PART_TIME = "Part-Time",
   CONTRACT = "Contract",
@@ -238,16 +252,16 @@ declare enum WORK_MODE {
   ONSITE = "Onsite",
 }
 
-declare interface Job {
-  $id: string;
+declare interface Career {
+  id: string;
   title: string;
   location?: string;
-  job_url: string;
+  career_url: string;
   description?: string;
   department?: string;
   salary_range?: string;
   application_deadline?: string;
-  job_type: JOB_TYPE;
+  career_type: CAREER_TYPE;
   sector_type: SECTOR_TYPE;
   work_mode: WORK_MODE;
   level: string;
@@ -262,29 +276,30 @@ declare interface Job {
 }
 
 declare interface Kanban_Column {
-  $id: string;
+  id: string;
   name: string;
-  index: number;
+  position: number;
   kanbanRow: Kanban_Row[];
 }
 
 declare interface Kanban_Row {
-  $id: string;
+  id: string;
   kanbanColumn: Kanban_Column;
   title: string;
   subtitle: string;
-  index: number;
+  position: number;
   appliedDate?: string;
   rejectedDate?: string;
   notes?: string;
   tags?: string[];
-  job?: Job;
+  career?: Career;
+  kanbanColumnId: string;
 }
 
 declare interface KanbanRow
-  extends Omit<Kanban_Row, "$id" | "kanbanColumn" | "index"> {
+  extends Omit<Kanban_Row, "id" | "kanbanColumn" | "position"> {
   columnId: string;
 }
 
 declare interface KanbanColumn
-  extends Omit<Kanban_Column, "$id" | "kanbanRow" | "index"> {}
+  extends Omit<Kanban_Column, "id" | "kanbanRow" | "position"> {}

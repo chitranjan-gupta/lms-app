@@ -26,10 +26,11 @@ const Profile = () => {
           <Text className="text-3xl font-bold my-5">My profile</Text>
           <Button
             onPress={() => router.push("/(auth)/(settings)")}
-            label="Settings"
             variant={"outline"}
             size="lg"
-          />
+          >
+            <Text className="text-xl font-bold" tx="settings.title" />
+          </Button>
           <View className="flex items-center justify-center my-5">
             <Image
               source={images.onboarding2}

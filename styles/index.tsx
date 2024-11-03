@@ -27,6 +27,7 @@ export const kanbanStyles = StyleSheet.create({
   kanbanStyle: {
     marginTop: 20,
     flex: 1,
+    padding: 5,
   },
   kanbanHeader: {
     backgroundColor: "white",

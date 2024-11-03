@@ -62,9 +62,9 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="jobs"
+        name="careers"
         options={{
-          title: "Jobs",
+          title: "Careers",
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
             <TabBarIcon

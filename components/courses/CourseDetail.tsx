@@ -15,6 +15,18 @@ interface CourseDetailProps {
   course: Course;
 }
 
+const darkModeCSS = `
+* {
+    color: white !important;
+}
+`;
+
+const lightModeCSS = ` 
+* {
+    color: black !important; 
+}
+`;
+
 export const CourseDetail = ({ course }: CourseDetailProps) => {
   const { colorScheme } = useColorScheme();
   const editor = useEditorBridge({
@@ -30,6 +42,12 @@ export const CourseDetail = ({ course }: CourseDetailProps) => {
       }
     }
   }, [course?.description, editor, editorState]);
+
+  useEffect(() => {
+    if (editorState.isReady) {
+      editor.injectCSS(colorScheme === "dark" ? darkModeCSS : lightModeCSS);
+    }
+  }, [colorScheme, editor, editorState]);
   return (
     <View className="w-full mb-5">
       <View className="border-b-2 !border-gray-300 pb-3">
@@ -37,7 +55,7 @@ export const CourseDetail = ({ course }: CourseDetailProps) => {
         <RichText
           editor={editor}
           style={{
-            backgroundColor: colorScheme === "light" ? "white" : "black",
+            backgroundColor: "transparent",
             width: "100%",
           }}
         />

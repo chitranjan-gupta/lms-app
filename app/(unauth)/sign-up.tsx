@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 import { CustomButton, InputField, OTPModal, SuccessModal } from "@/components";
 import { images } from "@/constants";
-import { useAuth } from "@/core/auth";
 import { useUser } from "@/core/store/user";
 import {
   Pressable,
@@ -20,7 +19,6 @@ import {
 import type { SignUpForm, Verification } from "@/types";
 
 const SignUp = () => {
-  const authStatus = useAuth((state) => state.status);
   const user = useUser((state) => state.user);
   const error = useUser((state) => state.error);
   const setUser = useUser((state) => state.setUser);
@@ -29,6 +27,7 @@ const SignUp = () => {
   const [isChecked, setChecked] = useState(false);
   const [isEye, setIsEye] = useState(true);
   const [form, setForm] = useState<SignUpForm>({
+    name: "",
     username: "",
     email: "",
     password: "",
@@ -40,10 +39,10 @@ const SignUp = () => {
   });
 
   useEffect(() => {
-    if (user && (user as any).userId && authStatus === "signOut") {
+    if (user && (user as any).userId) {
       setShowSuccessModal(true);
     }
-  }, [user, authStatus]);
+  }, [user]);
 
   const onSignUpPress = async () => {
     try {
@@ -83,7 +82,7 @@ const SignUp = () => {
 
   const onSuccess = () => {
     setShowSuccessModal(false);
-    router.push("/(auth)/(tabs)/home");
+    router.push("/(unauth)/sign-up");
   };
   return (
     <View className="w-full h-full">
@@ -101,7 +100,7 @@ const SignUp = () => {
             </Text>
           </View>
           <View className="p-5">
-            {/* <InputField
+            <InputField
               label="Name"
               placeholder="Enter name"
               IconLeft={
@@ -114,7 +113,7 @@ const SignUp = () => {
               }
               value={form.name}
               onChangeText={(value: any) => setForm({ ...form, name: value })}
-            /> */}
+            />
             <InputField
               label="Username"
               placeholder="Enter username"

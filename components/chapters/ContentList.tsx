@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { useCourse } from "@/core/store/course";
-import { useUser } from "@/core/store/user/user";
+import { useUser } from "@/core/store/user";
 import { SectionList } from "@/ui";
 
 import { LectureListCard } from "../lectures";

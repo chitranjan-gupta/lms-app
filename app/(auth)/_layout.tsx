@@ -2,7 +2,7 @@ import { SplashScreen, Redirect, Stack } from "expo-router";
 import { useCallback, useEffect } from "react";
 
 import { useAuth } from "@/core/auth";
-import { STATUS, useFirstTime } from "@/core/store/use-first";
+import { useFirstTime } from "@/core/store/use-first";
 import { useUser } from "@/core/store/user";
 
 const Layout = () => {
@@ -28,7 +28,7 @@ const Layout = () => {
     }
   }, [authStatus, getUser]);
 
-  if (isFirstTime === STATUS.yes) {
+  if (isFirstTime === "yes") {
     return <Redirect href="/(unauth)/onboarding" />;
   }
 
@@ -37,10 +37,10 @@ const Layout = () => {
   }
 
   return (
-    <Stack initialRouteName="(tabs)">
+    <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="(courses)" options={{ headerShown: false }} />
-      <Stack.Screen name="(jobs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(careers)" options={{ headerShown: false }} />
       <Stack.Screen name="(companies)" options={{ headerShown: false }} />
       <Stack.Screen name="(chats)" options={{ headerShown: false }} />
       <Stack.Screen name="(settings)" options={{ headerShown: false }} />

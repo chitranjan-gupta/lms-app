@@ -1,38 +1,42 @@
-import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
-import { ItemsContainer, LanguageItem, ThemeItem } from "@/components";
+import {
+  BackButton,
+  ItemsContainer,
+  LanguageItem,
+  ThemeItem,
+} from "@/components";
 // import Notification from "@/components/notification";
 import {
   ScrollView,
   View,
-  Pressable,
   SafeAreaView,
   FocusAwareStatusBar,
   Text,
-  AntDesign,
 } from "@/ui";
 
 export default function Settings() {
   const { colorScheme } = useColorScheme();
-  const onPress = () => {
-    router.back();
-  };
+  const backgroundColorAnimation = useAnimatedStyle(() => {
+    return {
+      backgroundColor:
+        colorScheme === "dark" ? withTiming("black") : withTiming("white"),
+    };
+  });
+
   return (
-    <View className="w-full h-full">
+    <Animated.View style={[backgroundColorAnimation]} className="w-full h-full">
       <FocusAwareStatusBar />
       <SafeAreaView>
         <View className="p-2">
-          <Pressable onPress={onPress}>
-            <AntDesign
-              name="arrowleft"
-              size={24}
-              color={colorScheme === "light" ? "black" : "white"}
-            />
-          </Pressable>
+          <BackButton />
         </View>
         <ScrollView>
-          <View className="flex-1 px-4">
+          <View className="flex-1 px-4 mt-4">
             <Text className="text-xl font-bold" tx="settings.title" />
             <ItemsContainer title="settings.generale">
               <LanguageItem />
@@ -42,6 +46,6 @@ export default function Settings() {
           {/* <Notification /> */}
         </ScrollView>
       </SafeAreaView>
-    </View>
+    </Animated.View>
   );
 }
