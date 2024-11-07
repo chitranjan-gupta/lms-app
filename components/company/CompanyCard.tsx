@@ -45,22 +45,16 @@ export const CompanyCard = ({ item }: CompanyCardProps) => {
         <View className="relative w-9/12 flex flex-row justify-between">
           <View className="flex flex-col">
             <View>
-              <Text className="text-xl font-bold">{item.name}</Text>
+              <Text className="text-xl font-bold">{item?.name || ""}</Text>
             </View>
             <View>
-              <Text className="text-base font-semibold">{item?.industry}</Text>
+              <Text className="text-base font-semibold">
+                {item?.industry || ""}
+              </Text>
             </View>
             <View>
-              <Text className="text-xs">{`${item.location!}`}</Text>
+              <Text className="text-xs">{item?.location || ""}</Text>
             </View>
-          </View>
-          <View>
-            <Text
-              className={`text-black font-bold text-base`}
-              style={{ color: "black" }}
-            >
-              {`${item.careers.length!}`}
-            </Text>
           </View>
         </View>
       </Pressable>

@@ -44,13 +44,13 @@ const JobBoard = () => {
   const [currentColumn, setCurrentColumn] = useState(initialColumn);
   const [currentCard, setCurrentCard] = useState<KanbanRow>(initialCard);
 
-  const getColumns = useColumns((state) => state.getColumns);
-  const columnState = useColumns((state) => state.status);
-  const newColumns = useColumns((state) => state.columns);
-  const createColumn = useColumns((state) => state.addColumn);
-  const newRows = useRows((state) => state.rows);
-  const addRow = useRows((state) => state.addRow);
-  const reorderRows = useRows((state) => state.changeOrderRows);
+  const {
+    getColumns,
+    status: columnState,
+    columns: newColumns,
+    addColumn: createColumn,
+  } = useColumns();
+  const { rows: newRows, addRow, changeOrderRows: reorderRows } = useRows();
 
   const data = useMemo(
     () =>
@@ -234,14 +234,14 @@ const JobBoard = () => {
   const deleteColumn = async () => {};
 
   const handleRowModalClose = () => {
-    rowmodal.dismiss();
     setCurrentCard(initialCard);
+    rowmodal.dismiss();
     setModalType(false);
   };
 
   const handleColumnModalClose = () => {
-    rowmodal.dismiss();
     setCurrentColumn(initialColumn);
+    columnmodal.dismiss();
   };
 
   return (
@@ -292,7 +292,7 @@ const JobBoard = () => {
           currentColumn={currentColumn}
           modalType={false}
           setCurrentColumn={setCurrentColumn}
-          handleModalClose={handleColumnModalClose}
+          handleColumnModalClose={handleColumnModalClose}
           addColumn={addColumn}
           updateColumn={updateColumn}
           deleteColumn={deleteColumn}

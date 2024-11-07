@@ -1,7 +1,8 @@
 import { useColorScheme } from "nativewind";
 import { useState } from "react";
 
-import { BackButton } from "@/components";
+import { BackButton, CareersList } from "@/components";
+import { useCareers } from "@/core/store/career";
 import {
   View,
   Text,
@@ -15,6 +16,15 @@ const CareersView = () => {
   const [sortCalendar, setSortCalendar] = useState<boolean>(false);
   const [sortAlphabetic, setSortAlphabetic] = useState<boolean>(false);
   const [sortClock, setSortClock] = useState<boolean>(false);
+  const { careers, status: isPending, getCareers, moreCareers } = useCareers();
+
+  const onRefresh = async () => {
+    await getCareers();
+  };
+
+  const onEndReached = async () => {
+    await moreCareers();
+  };
 
   return (
     <View>
@@ -55,6 +65,15 @@ const CareersView = () => {
               />
             </Pressable>
           </View>
+        </View>
+        <View className="w-full h-full">
+          <CareersList
+            careers={careers}
+            loading={isPending}
+            refreshing={isPending === "pending" ? true : false}
+            onRefresh={onRefresh}
+            onEndReached={onEndReached}
+          />
         </View>
       </SafeAreaView>
     </View>

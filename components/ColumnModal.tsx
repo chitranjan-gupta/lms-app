@@ -1,3 +1,4 @@
+import { useColorScheme } from "nativewind";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import ReactNativeModal from "react-native-modal";
 
@@ -23,7 +24,7 @@ interface ColumnModalProps {
   modalType: boolean;
   currentColumn: KanbanColumn;
   setCurrentColumn: Dispatch<SetStateAction<KanbanColumn>>;
-  handleModalClose: () => void;
+  handleColumnModalClose: () => void;
   addColumn: () => Promise<void>;
   updateColumn: () => Promise<void>;
   deleteColumn: () => Promise<void>;
@@ -34,12 +35,13 @@ export const ColumnModal = ({
   modalType,
   currentColumn,
   setCurrentColumn,
-  handleModalClose,
+  handleColumnModalClose,
   addColumn,
   updateColumn,
   deleteColumn,
 }: ColumnModalProps) => {
   const [showModal, setShowModal] = useState(false);
+  const { colorScheme } = useColorScheme();
   return (
     <View>
       <ReactNativeModal
@@ -55,27 +57,31 @@ export const ColumnModal = ({
           </View>
         </View>
       </ReactNativeModal>
-      <Modal ref={modal.ref} snapPoints={snapPoints}>
+      <Modal
+        ref={modal.ref}
+        snapPoints={snapPoints}
+        backgroundStyle={{
+          backgroundColor: colorScheme === "dark" ? "black" : "white",
+        }}
+      >
         <ScrollView className="py-2 px-5 rounded-xl flex flex-col pb-10 bg-white dark:bg-black w-full h-full">
-          <View className="flex flex-row justify-between items-center">
+          <View className="flex flex-row justify-start items-center gap-x-5">
+            <View className="bg-gray-200 rounded-full">
+              <Pressable onPress={handleColumnModalClose}>
+                <Entypo name="cross" size={24} color={"black"} />
+              </Pressable>
+            </View>
             <View>
               <Text className="text-xl font-bold">
                 {!modalType ? "Add New Column" : "Update Column"}
               </Text>
             </View>
-            <View>
-              <Pressable onPress={handleModalClose}>
-                <Entypo name="cross" size={24} color="black" />
-              </Pressable>
-            </View>
           </View>
           <View className="flex flex-col gap-y-1 pb-10">
             <View>
               <InputBox
-                editable
-                numberOfLines={1}
-                label="Title"
-                placeholder="Enter the title"
+                label="Name"
+                placeholder="Enter the name"
                 IconLeft={
                   <Feather
                     name="user"

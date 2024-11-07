@@ -1,4 +1,4 @@
-import { Text, View, Input } from "@/ui";
+import { Text, View, BottomSheetTextInput } from "@/ui";
 
 import type { InputFieldProps } from "@/types";
 
@@ -23,7 +23,7 @@ export const InputBox = ({
         className={`flex flex-row justify-start items-center relative bg-neutral-100 rounded-full border border-neutral-100 focus:border-primary-500  ${containerStyle}`}
       >
         {IconLeft}
-        <Input
+        <BottomSheetTextInput
           className={`rounded-full p-4 font-bold text-[15px] flex-1 ${inputStyle} text-left`}
           secureTextEntry={secureTextEntry}
           {...props}

@@ -1,3 +1,5 @@
+import { RefreshControl } from "react-native";
+
 import { List } from "@/ui";
 
 import { EmptyCard } from "../EmptyCard";
@@ -74,13 +76,23 @@ export const RecentCareers = ({
   );
 };
 
-interface CareerListProps {
+interface CareersListProps {
   careers: Career[];
   loading: string;
   company?: Company;
+  refreshing: boolean;
+  onRefresh: () => Promise<void>;
+  onEndReached: () => Promise<void>;
 }
 
-export const CareerList = ({ careers, loading, company }: CareerListProps) => {
+export const CareersList = ({
+  careers,
+  loading,
+  company,
+  refreshing,
+  onRefresh,
+  onEndReached,
+}: CareersListProps) => {
   return (
     <List
       data={careers}
@@ -88,19 +100,21 @@ export const CareerList = ({ careers, loading, company }: CareerListProps) => {
         <CareerCard item={!company ? item : { ...item, company: company }} />
       )}
       keyExtractor={(item, index) => index.toString()}
-      className="w-full h-full"
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
-        paddingBottom: 5,
-        paddingTop: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
       }}
       ListEmptyComponent={() => (
         <EmptyCard title="No careers found" loading={loading} isImage={true} />
       )}
       estimatedItemSize={10}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     />
   );
 };

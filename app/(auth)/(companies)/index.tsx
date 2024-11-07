@@ -1,7 +1,7 @@
 import { useColorScheme } from "nativewind";
 import { useState } from "react";
 
-import { BackButton, RecentCompanies } from "@/components";
+import { BackButton, CompaniesList } from "@/components";
 import { useCompanies } from "@/core/store/company";
 import {
   View,
@@ -13,10 +13,18 @@ import {
 
 const CompaniesView = () => {
   const { colorScheme } = useColorScheme();
-  const { companies, status } = useCompanies();
+  const { companies, status, getCompanies, moreCompanies } = useCompanies();
   const [sortCalendar, setSortCalendar] = useState<boolean>(false);
   const [sortAlphabetic, setSortAlphabetic] = useState<boolean>(false);
   const [sortClock, setSortClock] = useState<boolean>(false);
+
+  const onRefresh = async () => {
+    await getCompanies();
+  };
+
+  const onEndReached = async () => {
+    await moreCompanies();
+  };
 
   return (
     <View>
@@ -59,7 +67,13 @@ const CompaniesView = () => {
           </View>
         </View>
         <View className="w-full h-full p-2">
-          <RecentCompanies companies={companies} loading={status} />
+          <CompaniesList
+            companies={companies}
+            loading={status}
+            refreshing={status === "pending" ? true : false}
+            onRefresh={onRefresh}
+            onEndReached={onEndReached}
+          />
         </View>
       </SafeAreaView>
     </View>

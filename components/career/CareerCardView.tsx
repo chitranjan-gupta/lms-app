@@ -1,4 +1,5 @@
-import { Pressable, Text, View, ImageBackground } from "@/ui";
+import { images } from "@/constants";
+import { Pressable, Text, View, Image } from "@/ui";
 
 import type { Career } from "@/types";
 
@@ -27,12 +28,10 @@ export const CareerCardView = ({ item }: CareerCardViewProps) => {
           className={`w-full h-full rounded-xl flex flex-col justify-start items-center p-5`}
         >
           <View>
-            <ImageBackground
-              source={item?.company.logo_url!}
-              className="rounded-xl w-[48px] h-[48px]"
-              style={{ borderRadius: 12 }}
-              imageStyle={{ borderRadius: 12 }}
-            ></ImageBackground>
+            <Image
+              source={item?.company.logo_url || images.onboarding1}
+              style={{ borderRadius: 12, width: 48, height: 48 }}
+            />
           </View>
           <View className="h-[50px] flex flex-col justify-start items-center w-full gap-y-2">
             <View className="flex flex-col items-center">

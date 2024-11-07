@@ -1,5 +1,6 @@
 import { Link, router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import { CustomButton, InputField, OTPModal, SuccessModal } from "@/components";
 import { images } from "@/constants";
@@ -12,13 +13,13 @@ import {
   Checkbox,
   Feather,
   Fontisto,
-  ImageBackground,
-  Alert,
+  Image,
 } from "@/ui";
 
 import type { SignUpForm, Verification } from "@/types";
 
 const SignUp = () => {
+  const flashRef = useRef<FlashMessage>(null);
   const user = useUser((state) => state.user);
   const error = useUser((state) => state.error);
   const setUser = useUser((state) => state.setUser);
@@ -46,14 +47,26 @@ const SignUp = () => {
 
   const onSignUpPress = async () => {
     try {
+      if (
+        form.name.length >= 4 &&
+        form.username.length >= 4 &&
+        form.email.length >= 5 &&
+        form.password.length >= 5
+      ) {
+        setUser(form);
+      } else {
+        showMessage({
+          message:
+            "Name, Username should be greater than 3 and Email & Password length should be greater than 4",
+          type: "danger",
+        });
+      }
       // setVerification({
       //   ...verification,
       //   state: "pending",
       // });
-      setUser(form);
     } catch (err: any) {
       console.log(err);
-      Alert.alert("Error", err.message);
     }
   };
 
@@ -84,17 +97,23 @@ const SignUp = () => {
     setShowSuccessModal(false);
     router.push("/(unauth)/sign-up");
   };
+
   return (
     <View className="w-full h-full">
+      <FlashMessage ref={flashRef} position="top" statusBarHeight={20} />
       <ScrollView className="w-full h-full">
         <View className="flex-1">
           <View className="relative w-full h-[250px] rounded-bl-3xl">
-            <ImageBackground
+            <Image
               source={images.background}
-              className="z-0 w-full h-[250px] rounded-bl-3xl"
-            >
-              <View className="w-full h-[250px] rounded-bl-3xl"></View>
-            </ImageBackground>
+              style={{
+                width: "100%",
+                height: 250,
+                borderBottomLeftRadius: 30,
+                zIndex: 0,
+              }}
+              contentFit="cover"
+            />
             <Text className="text-2xl font-bold absolute bottom-5 left-5">
               Create Your Account
             </Text>
@@ -203,7 +222,7 @@ const SignUp = () => {
               href="/sign-in"
               className="text-lg text-center text-general-200 mt-10"
             >
-              <Text>Already have an account? Log In</Text>
+              <Text>Already have an account? Sign In</Text>
             </Link>
           </View>
           <OTPModal

@@ -110,22 +110,32 @@ export const RowModal = ({
           )}
         </View>
       </ReactNativeModal>
-      <Modal ref={modal.ref} snapPoints={snapPoints}>
+      <Modal
+        ref={modal.ref}
+        snapPoints={snapPoints}
+        backgroundStyle={{
+          backgroundColor: colorScheme === "dark" ? "black" : "white",
+        }}
+      >
         <View className="py-2 px-5 rounded-xl flex flex-col pb-10 bg-white dark:bg-black">
-          <View className="flex flex-row justify-between items-center">
+          <View className="flex flex-row justify-start items-center gap-x-5">
+            <View className="bg-gray-200 rounded-full">
+              <Pressable onPress={handleModalClose}>
+                <Entypo
+                  name="cross"
+                  size={24}
+                  color={colorScheme === "dark" ? "white" : "black"}
+                />
+              </Pressable>
+            </View>
             <View>
               <Text className="text-xl font-bold">
                 {!modalType ? "Add New Card" : "Update Card"}
               </Text>
             </View>
-            <View>
-              <Pressable onPress={handleModalClose}>
-                <Entypo name="cross" size={24} color="black" />
-              </Pressable>
-            </View>
           </View>
           <View className="flex flex-col gap-y-1 pb-10">
-            <View>
+            <View className="w-full ">
               <InputBox
                 label="Title"
                 placeholder="Enter the title"
@@ -137,7 +147,7 @@ export const RowModal = ({
                     style={{ marginLeft: 10 }}
                   />
                 }
-                value={currentCard.title}
+                defaultValue={currentCard.title}
                 onChangeText={(val) =>
                   setCurrentCard((prev) => ({ ...prev, title: val }))
                 }
@@ -155,7 +165,7 @@ export const RowModal = ({
                     style={{ marginLeft: 10 }}
                   />
                 }
-                value={currentCard.subtitle}
+                defaultValue={currentCard.subtitle}
                 onChangeText={(val) =>
                   setCurrentCard((prev) => ({ ...prev, subtitle: val }))
                 }

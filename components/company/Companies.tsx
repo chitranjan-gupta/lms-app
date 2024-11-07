@@ -1,5 +1,5 @@
 import { MotiView } from "moti";
-import { Dimensions } from "react-native";
+import { Dimensions, RefreshControl } from "react-native";
 
 import { List } from "@/ui";
 
@@ -51,6 +51,45 @@ export const RecentCompanies = ({
   return (
     <List
       data={companies}
+      renderItem={({ item, index }) => <CompanyCard item={item} />}
+      keyExtractor={(item, index) => index.toString()}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+      ListEmptyComponent={() => (
+        <EmptyCard
+          title="No companies found"
+          loading={loading}
+          isImage={true}
+        />
+      )}
+      numColumns={2}
+      estimatedItemSize={10}
+      contentContainerStyle={{
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+      }}
+    />
+  );
+};
+
+interface CompaniesListProps {
+  companies: Company[];
+  loading: string;
+  refreshing: boolean;
+  onRefresh: () => Promise<void>;
+  onEndReached: () => Promise<void>;
+}
+
+export const CompaniesList = ({
+  companies,
+  loading,
+  refreshing,
+  onRefresh,
+  onEndReached,
+}: CompaniesListProps) => {
+  return (
+    <List
+      data={companies}
       renderItem={({ item, index }) => (
         <MotiView
           style={{ width: Dimensions.get("window").width / 2 - 20 }}
@@ -73,6 +112,14 @@ export const RecentCompanies = ({
       )}
       numColumns={2}
       estimatedItemSize={10}
+      contentContainerStyle={{
+        paddingVertical: 10,
+      }}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     />
   );
 };

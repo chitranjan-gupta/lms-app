@@ -12,6 +12,7 @@ import {
   SwitchBar,
   BackButton,
 } from "@/components";
+import { images } from "@/constants";
 import { useCompany } from "@/core/store/company";
 import { shadowStyle } from "@/styles";
 import {
@@ -21,26 +22,28 @@ import {
   TouchableOpacity,
   Entypo,
   FocusAwareStatusBar,
-  ImageBackground,
+  Image,
 } from "@/ui";
 
 const CompanyView = () => {
   const { colorScheme } = useColorScheme();
   const { companyId } = useLocalSearchParams();
-  const companyStatus = useCompany((state) => state.status);
-  const companyid = useCompany((state) => state.companyid);
-  const company = useCompany((state) => state.company);
-  const getCompany = useCompany((state) => state.getCompany);
+  const {
+    status: companyStatus,
+    companyid,
+    company,
+    getCompany,
+  } = useCompany();
   const isOn = useSharedValue<boolean>(false);
-  const isFlipped = useSharedValue(false);
+  const isFlipped = useSharedValue<boolean>(false);
 
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
     if (companyid) {
       getCompany();
     }
-  }, [companyid, getCompany]);
+  }, [companyid, getCompany, companyId]);
 
   const handlePress = () => {
     isOn.value = !isOn.value;
@@ -49,7 +52,7 @@ const CompanyView = () => {
   };
 
   return (
-    <View className="w-full h-full">
+    <View className="w-full h-full bg-white dark:bg-black">
       <FocusAwareStatusBar />
       {companyStatus !== "pending" && company ? (
         <SafeAreaView className="flex flex-col justify-between w-full h-full">
@@ -65,16 +68,14 @@ const CompanyView = () => {
 
             <View className="w-full flex flex-col justify-center items-center mb-5">
               <View className="w-24 h-24 bg-gray-200 rounded-full items-center justify-center">
-                <ImageBackground
-                  source={company?.logo_url}
+                <Image
+                  source={company?.logo_url || images.onboarding1}
                   contentFit="contain"
-                  className="w-20 h-20"
-                >
-                  <View className="w-20 h-20 rounded-full"></View>
-                </ImageBackground>
+                  style={{ width: 65, height: 65 }}
+                />
               </View>
               <View>
-                <Text className="text-base">{company?.name}</Text>
+                <Text className="text-base">{company?.name || "Unknown"}</Text>
               </View>
             </View>
             <View className="w-full flex flex-row justify-center items-center gap-x-5 px-2 mb-5">
@@ -83,7 +84,7 @@ const CompanyView = () => {
                 className="bg-gray-200 p-3 rounded-xl"
               >
                 <Text className="!text-black text-base">
-                  {company?.industry}
+                  {company?.industry || "Unknown"}
                 </Text>
               </View>
               <View
@@ -91,7 +92,7 @@ const CompanyView = () => {
                 className="bg-gray-200 p-3 rounded-xl"
               >
                 <Text className="!text-black text-base">
-                  {company?.location}
+                  {company?.location || "Unknown"}
                 </Text>
               </View>
               <View
@@ -99,7 +100,7 @@ const CompanyView = () => {
                 className="bg-gray-200 p-3 rounded-xl"
               >
                 <Text className="!text-black text-base">
-                  {company?.careers.length}
+                  {company?.careers.length || "Unknown"}
                 </Text>
               </View>
             </View>
@@ -111,6 +112,7 @@ const CompanyView = () => {
                 style={{
                   height: 50,
                 }}
+                name={company?.name || "Unknown"}
               />
             </View>
             <FlipCard
@@ -132,11 +134,11 @@ const CompanyView = () => {
                 <View className="w-full">
                   <View className="flex flex-col px-2 mb-2">
                     <Text className="font-bold text-xl">Description</Text>
-                    <Text>{company?.description}</Text>
+                    <Text>{company?.description || "Unknown"}</Text>
                   </View>
                   <View className="flex flex-col px-2 mb-2">
                     <Text className="font-bold text-xl">Company Culture</Text>
-                    <Text></Text>
+                    <Text>{"Unknown"}</Text>
                   </View>
                 </View>
               }

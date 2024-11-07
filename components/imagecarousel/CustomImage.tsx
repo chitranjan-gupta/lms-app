@@ -1,6 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useLayoutEffect, useState } from "react";
-import { Image as NImage } from "react-native";
+import { useState } from "react";
 import Animated, {
   useAnimatedStyle,
   interpolate,
@@ -9,7 +8,7 @@ import Animated, {
 
 import { images } from "@/constants";
 import { gradients } from "@/constants/gradients";
-import { Image, View } from "@/ui";
+import { Image, View, Text } from "@/ui";
 
 const CustomImage = ({
   item,
@@ -18,27 +17,13 @@ const CustomImage = ({
   size,
   spacer,
 }: {
-  item: { image: any } | { key: string };
+  item: { image?: any; logo_url?: string; name?: string } | { key: string };
   x: SharedValue<number>;
   index: number;
   size: number;
   spacer: number;
 }) => {
-  const [aspectRatio, setAspectRatio] = useState(1);
-
-  //Get Image Width and Height to Calculate AspectRatio
-  useLayoutEffect(() => {
-    if ("image" in item) {
-      const { width, height } = NImage.resolveAssetSource(
-        item.image || images.onboarding1,
-      );
-      setAspectRatio(width / height);
-    } else {
-      const { width, height } = NImage.resolveAssetSource(images.onboarding1);
-      setAspectRatio(width / height);
-    }
-  }, [item]);
-
+  const [gradi] = useState(() => index % gradients.length);
   const style = useAnimatedStyle(() => {
     const scale = interpolate(
       x.value,
@@ -50,24 +35,36 @@ const CustomImage = ({
     };
   });
 
-  if (!("image" in item)) {
+  if (!("logo_url" in item)) {
     return <View style={{ width: spacer }} key={index} />;
   }
   return (
-    <View style={{ width: size }} key={index}>
+    <View style={{ width: size }} key={index} className="p-2">
       <Animated.View
-        style={[style]}
-        className="rounded-[34px] overflow-hidden w-full h-[200px]"
+        style={[style, { elevation: 10 }]}
+        className="rounded-[34px] overflow-hidden w-full h-[250px]"
       >
         <LinearGradient
-          colors={gradients[index][0].colors}
-          style={{ flex: 1, height: 100 }}
+          colors={gradients[gradi][0].colors}
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            display: "flex",
+            width: "100%",
+          }}
         >
-          <Image
-            source={item.image || images.onboarding1}
-            style={[{ aspectRatio: aspectRatio, height: 200 }]}
-            className="w-full h-[200px]"
-          />
+          <View className="flex flex-col justify-center items-center">
+            <Image
+              source={item?.image || item?.logo_url || images.onboarding1}
+              style={{ width: 100, height: 100 }}
+            />
+            <View className="flex flex-row justify-center items-center">
+              <Text className="text-center !text-white">
+                {item?.name || ""}
+              </Text>
+            </View>
+          </View>
         </LinearGradient>
       </Animated.View>
     </View>

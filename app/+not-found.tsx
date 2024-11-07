@@ -1,17 +1,17 @@
 import { Link, Stack } from "expo-router";
 
-import { ThemedText, ThemedView } from "@/components";
+import { Text, View } from "@/ui";
 
 const NotFoundScreen = () => {
   return (
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
-      <ThemedView className="flex-[1] items-center justify-center p-[20px]">
-        <ThemedText type="title">This screen doesn't exist.</ThemedText>
+      <View className="flex-[1] items-center justify-center p-[20px]">
+        <Text>This screen doesn't exist.</Text>
         <Link href="/" className="mt-[15px] py-[15px]">
-          <ThemedText type="link">Go to home screen!</ThemedText>
+          <Text>Go to home screen!</Text>
         </Link>
-      </ThemedView>
+      </View>
     </>
   );
 };

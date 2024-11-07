@@ -1,9 +1,10 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
-import { Share } from "react-native";
+import { Share, Dimensions } from "react-native";
 
 import { BackButton, CustomButton, ExternalLink, Loader } from "@/components";
+import { images } from "@/constants";
 import { useCareer } from "@/core/store/career";
 import { setCompany } from "@/core/store/company";
 import { camelCase } from "@/lib";
@@ -17,23 +18,22 @@ import {
   Entypo,
   FontAwesome,
   FocusAwareStatusBar,
-  ImageBackground,
   Alert,
+  Image,
 } from "@/ui";
 
 const CareerView = () => {
+  const { width } = Dimensions.get("window");
+
   const { colorScheme } = useColorScheme();
   const { careerId } = useLocalSearchParams();
-  const careerid = useCareer((state) => state.careerid);
-  const career = useCareer((state) => state.career);
-  const careerStatus = useCareer((state) => state.status);
-  const getCareer = useCareer((state) => state.getCareer);
+  const { careerid, career, status: careerStatus, getCareer } = useCareer();
 
   useEffect(() => {
     if (careerid) {
       getCareer();
     }
-  }, [careerid, getCareer]);
+  }, [careerid, getCareer, careerId]);
 
   const onShare = async () => {
     try {
@@ -76,20 +76,18 @@ const CareerView = () => {
             <View className="w-full">
               <View className="w-full flex flex-row justify-start items-center gap-x-5 mb-5 px-2">
                 <View className="w-20 h-20 bg-gray-200 rounded-full items-center justify-center">
-                  <ImageBackground
-                    source={career?.company?.logo_url}
+                  <Image
+                    source={career?.company?.logo_url || images.onboarding1}
                     contentFit="contain"
-                    className="w-16 h-16"
-                  >
-                    <View className="w-16 h-16"></View>
-                  </ImageBackground>
+                    style={{ width: 55, height: 55 }}
+                  />
                 </View>
                 <View className="w-2/3 overflow-hidden">
                   <Text className="text-base" numberOfLines={1}>
-                    {career?.company?.name}
+                    {career?.company?.name || "Unknown"}
                   </Text>
                   <Text className="text-xl font-bold" numberOfLines={1}>
-                    {career?.title}
+                    {career?.title || "Unknown"}
                   </Text>
                 </View>
               </View>
@@ -100,7 +98,9 @@ const CareerView = () => {
                     size={24}
                     color={colorScheme === "light" ? "black" : "white"}
                   />
-                  <Text className="text-base">{career?.location}</Text>
+                  <Text className="text-base">
+                    {career?.location || "Unknown"}
+                  </Text>
                 </View>
                 <View className="flex flex-row gap-x-2 pl-1.5">
                   <FontAwesome
@@ -108,32 +108,34 @@ const CareerView = () => {
                     size={24}
                     color={colorScheme === "light" ? "black" : "white"}
                   />
-                  <Text className="text-base">{career?.salary_range}</Text>
+                  <Text className="text-base pl-1.5">
+                    {career?.salary_range || "Unknown"}
+                  </Text>
                 </View>
               </View>
               <View className="w-full flex flex-row justify-center items-start gap-x-5 gap-y-5 px-2 mb-5">
                 <View className="flex flex-col gap-x-2">
                   <Text className="text-base">Level</Text>
                   <Text className="text-base" numberOfLines={1}>
-                    {camelCase(career?.level || "")}
+                    {camelCase(career?.level || "Unknown")}
                   </Text>
                 </View>
                 <View className="flex flex-col gap-x-2 border-l border-r px-5">
                   <Text className="text-base">Career Type</Text>
                   <Text className="text-base" numberOfLines={1}>
-                    {camelCase(career?.career_type || "")}
+                    {camelCase(career?.career_type || "Unknown")}
                   </Text>
                 </View>
                 <View className="flex flex-col gap-x-2">
                   <Text className="text-base">Work Mode</Text>
                   <Text className="text-base" numberOfLines={1}>
-                    {camelCase(career?.work_mode || "")}
+                    {camelCase(career?.work_mode || "Unknown")}
                   </Text>
                 </View>
               </View>
               <View className="p-2">
                 <Text className="text-base">
-                  {`Application Deadline: ${new Date(career.application_deadline!).toDateString()}`}
+                  {`Application Deadline: ${new Date(career.application_deadline || new Date()).toDateString()}`}
                 </Text>
               </View>
               {/* <View
@@ -223,20 +225,20 @@ const CareerView = () => {
                   <TouchableOpacity onPress={onPress}>
                     <View className="w-full flex flex-row justify-start items-center gap-x-5 mb-5 px-2">
                       <View className="w-20 h-20 bg-gray-200 rounded-full items-center justify-center">
-                        <ImageBackground
-                          source={career?.company?.logo_url}
+                        <Image
+                          source={
+                            career?.company?.logo_url || images.onboarding1
+                          }
                           contentFit="contain"
-                          className="w-16 h-16"
-                        >
-                          <View className="w-16 h-16"></View>
-                        </ImageBackground>
+                          style={{ width: 55, height: 55 }}
+                        />
                       </View>
                       <View className="w-2/3 overflow-hidden">
                         <Text className="text-base" numberOfLines={1}>
-                          {career?.company?.name}
+                          {career?.company?.name || "Unknown"}
                         </Text>
                         <Text className="text-base" numberOfLines={1}>
-                          {career?.company?.industry}
+                          {career?.company?.industry || "Unknown"}
                         </Text>
                       </View>
                     </View>
@@ -246,11 +248,11 @@ const CareerView = () => {
             </View>
           </ScrollView>
 
-          <View className="relative px-2 mb-2 flex flex-row gap-x-2">
-            <CustomButton className="w-20" onPress={onShare}>
+          <View className="relative w-full px-2 mb-2 flex flex-row gap-x-2">
+            <CustomButton style={{ width: 75 }} onPress={onShare}>
               <Entypo name="share" size={24} color="white" />
             </CustomButton>
-            <CustomButton className="w-3/4">
+            <CustomButton style={{ width: width - 100 }}>
               {career?.career_url ? (
                 <ExternalLink
                   href={career?.career_url!}

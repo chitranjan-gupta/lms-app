@@ -14,13 +14,8 @@ import { FocusAwareStatusBar, Text, View } from "@/ui";
 
 const CourseView = () => {
   const { colorScheme } = useColorScheme();
-  const user = useUser((state) => state.user);
-  const isPurchased = useUser((state) => state.isPurchased);
-  const getPurchase = useUser((state) => state.getPurchase);
-  const courseid = useCourse((state) => state.courseid);
-  const course = useCourse((state) => state.course);
-  const getCourse = useCourse((state) => state.getCourse);
-  const status = useCourse((state) => state.status);
+  const { user, isPurchased, getPurchase } = useUser();
+  const { courseid, course, getCourse, status } = useCourse();
 
   useEffect(() => {
     if (courseid && (user as any).userId) {

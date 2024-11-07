@@ -1,5 +1,6 @@
-import { Link, router } from "expo-router";
-import { useEffect, useState } from "react";
+import { Link } from "expo-router";
+import { useRef, useState } from "react";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import { CustomButton, InputField } from "@/components";
 import { images } from "@/constants";
@@ -12,12 +13,11 @@ import {
   Checkbox,
   Feather,
   Fontisto,
-  ImageBackground,
-  Alert,
+  Image,
 } from "@/ui";
 
 const SignIn = () => {
-  const status = useAuth((state) => state.status);
+  const flashRef = useRef<FlashMessage>(null);
   const error = useAuth((state) => state.error);
   const signIn = useAuth((state) => state.signIn);
   const isloading = useAuth((state) => state.isloading);
@@ -28,37 +28,37 @@ const SignIn = () => {
     password: "",
   });
 
-  useEffect(() => {
-    if (status === "signIn") {
-      router.replace("/(auth)/(tabs)/home");
-    }
-  }, [status]);
-
   const onSignInPress = async () => {
     try {
       if (form.email.length > 5 && form.password.length > 5) {
-        signIn(form);
+        await signIn(form);
       } else {
-        console.log("Email & Password length should be greater than 5");
-        Alert.alert("Email & Password length should be greater than 5");
+        showMessage({
+          message: "Email & Password length should be greater than 5",
+          type: "danger",
+        });
       }
     } catch (err: any) {
       console.log(JSON.stringify(err, null, 2));
-      Alert.alert("Error", err.message);
     }
   };
 
   return (
     <View className="w-full h-full">
+      <FlashMessage ref={flashRef} position="top" statusBarHeight={20} />
       <ScrollView className="flex-1 w-full h-full">
         <View className="flex-1 ">
           <View className="relative w-full h-[250px] rounded-bl-3xl">
-            <ImageBackground
+            <Image
               source={images.background}
-              className="z-0 w-full h-[250px] rounded-bl-3xl"
-            >
-              <View className="w-full h-[250px] rounded-bl-3xl"></View>
-            </ImageBackground>
+              contentFit="cover"
+              style={{
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
+                borderBottomLeftRadius: 30,
+              }}
+            />
             <Text className="text-2xl font-bold absolute bottom-5 left-5">
               Welcome 👋
             </Text>

@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { View, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
   useAnimatedRef,
 } from "react-native-reanimated";
+
+import { View } from "@/ui";
 
 import CustomImage from "./CustomImage";
 import Pagination from "./Pagination";
@@ -14,7 +16,7 @@ export const CustomImageCarousel = ({
   autoPlay,
   pagination,
 }: {
-  data: { image: any }[];
+  data: { image?: any; logo_url?: string }[];
   autoPlay: boolean;
   pagination: boolean;
 }) => {
@@ -56,7 +58,7 @@ export const CustomImageCarousel = ({
           _offSet = Math.floor(_offSet + SIZE);
         }
         scrollViewRef.current?.scrollTo({ x: _offSet, y: 0 });
-      }, 2000);
+      }, 5000);
     } else {
       clearInterval(interval.current);
     }

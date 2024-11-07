@@ -1,10 +1,11 @@
 import { router } from "expo-router";
 
+import { images } from "@/constants";
 import { setCareer } from "@/core/store/career";
 import { bookmarkRow } from "@/core/store/kanban";
 import { camelCase } from "@/lib";
 import { shadowStyle } from "@/styles";
-import { Pressable, Text, View, Feather, Entypo, ImageBackground } from "@/ui";
+import { Pressable, Text, View, Feather, Entypo, Image } from "@/ui";
 
 import type { Career } from "@/types";
 
@@ -32,17 +33,17 @@ export const CareerCard = ({ item }: CareerCardProps) => {
     >
       <Pressable onPress={onPress} className="w-full flex flex-col gap-y-0 p-5">
         <View className="rounded-xl w-full flex flex-row justify-between items-center">
-          <ImageBackground
-            source={item?.company?.logo_url!}
+          <Image
+            source={item?.company?.logo_url! || images.onboarding1}
             className="rounded-xl"
             alt={item?.company?.name}
             style={{
               borderRadius: 12,
+              width: 50,
+              height: 50,
             }}
-            imageStyle={{ borderRadius: 12 }}
-          >
-            <View className="w-12 h-12 rounded-lg"></View>
-          </ImageBackground>
+            contentFit="contain"
+          />
           <View>
             <Pressable onPress={onBookmark}>
               <Feather name="bookmark" size={24} color={"#524B6B"} />
@@ -56,23 +57,23 @@ export const CareerCard = ({ item }: CareerCardProps) => {
                 className="text-xl font-bold w-full !text-[#150A33]"
                 numberOfLines={1}
               >
-                {item?.title}
+                {item?.title || "Unknown"}
               </Text>
             </View>
             <View className="flex flex-row w-full overflow-hidden">
               <View className="w-1/4 flex flex-row items-start gap-x-1">
                 <Text className="text-base !text-[#524B6B]" numberOfLines={1}>
-                  {item?.company?.name! || ""}
+                  {item?.company?.name || "Unknown"}
                 </Text>
                 <Entypo name="dot-single" size={24} color={"#524B6B"} />
               </View>
 
-              <View className="w-3/4">
+              <View className="w-3/4 ml-3">
                 <Text
                   className="text-base w-full !text-[#524B6B]"
                   numberOfLines={1}
                 >
-                  {`${item?.location!}`}
+                  {item?.location || "Unknown"}
                 </Text>
               </View>
             </View>
@@ -80,29 +81,31 @@ export const CareerCard = ({ item }: CareerCardProps) => {
           <View className="flex flex-row justify-around">
             <View className="p-2 rounded-xl !bg-gray-200">
               <Text className="text-sm !text-[#524B6B]">
-                {item?.department || ""}
+                {item?.department || "Unknown"}
               </Text>
             </View>
             <View className="p-2 rounded-xl !bg-gray-200">
               <Text className="text-sm !text-[#524B6B]">
-                {camelCase(item?.career_type || "")}
+                {camelCase(item?.career_type || "Unknown")}
               </Text>
             </View>
             <View className="p-2 rounded-xl !bg-gray-200">
               <Text className="text-sm !text-[#524B6B]">
-                {camelCase(item?.level || "")}
+                {camelCase(item?.level || "Unknown")}
               </Text>
             </View>
           </View>
           <View className="flex flex-row justify-between">
             <View>
               <Text className="text-base !text-red-500" numberOfLines={1}>
-                {new Date(item?.application_deadline!).toDateString()}
+                {new Date(
+                  item?.application_deadline || new Date(),
+                ).toDateString()}
               </Text>
             </View>
             <View>
               <Text className="text-base !text-[#524B6B]" numberOfLines={1}>
-                {item?.salary_range}
+                {item?.salary_range || "Unknown"}
               </Text>
             </View>
           </View>

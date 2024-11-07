@@ -22,17 +22,15 @@ import {
 
 const Courses = () => {
   const { colorScheme } = useColorScheme();
-  const courses = useCourses((state) => state.courses);
-  const loading = useCourses((state) => state.status);
-  const categories = useCategories((state) => state.categories);
-  const isPending = useCategories((state) => state.status);
+  const { courses, status: loading } = useCourses();
+  const { categories, status: isPending } = useCategories();
   const [filterCategories, setFilterCategories] = useState<boolean>(false);
   const [sortCalendar, setSortCalendar] = useState<boolean>(false);
   const [sortAlphabetic, setSortAlphabetic] = useState(false);
   const [sortClock, setSortClock] = useState(false);
 
   const handlePress = () => {
-    router.push("/(auth)/(search)");
+    router.push("/(auth)/(search)/course");
   };
 
   return (

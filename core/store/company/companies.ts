@@ -8,8 +8,12 @@ import type { Company } from "@/types";
 interface CompaniesState {
   status: "idle" | "pending";
   companies: Company[];
+  page: number;
+  per_page: number;
+  last_page: number;
   setCompanies: (Companies: Company[]) => Promise<void>;
   getCompanies: () => Promise<void>;
+  moreCompanies: () => Promise<void>;
   hydrate: () => void;
 }
 
@@ -17,16 +21,38 @@ export const useCompanies = create<CompaniesState>()(
   devtools((set, get) => ({
     status: "idle",
     companies: [],
+    page: 1,
+    per_page: 10,
+    last_page: 1,
     setCompanies: async (Companies: Company[]) => {
       set({ companies: Companies });
     },
     getCompanies: async () => {
       set({ status: "pending" });
-      const data = await fetchCompanies();
-      set({
-        status: "idle",
-        companies: data,
-      });
+      const data = await fetchCompanies(1, 10);
+      if (data) {
+        set({
+          status: "idle",
+          companies: data.data as Company[],
+          page: data.current_page,
+          per_page: data.per_page,
+          last_page: data.last_page,
+        });
+      }
+    },
+    moreCompanies: async () => {
+      if (get().last_page > get().page) {
+        const data = await fetchCompanies(get().page + 1, get().per_page);
+        if (data) {
+          set((state) => ({
+            status: "idle",
+            companies: [...state.companies, ...data.data],
+            page: data.current_page,
+            per_page: data.per_page,
+            last_page: data.last_page,
+          }));
+        }
+      }
     },
     hydrate: async () => {
       try {

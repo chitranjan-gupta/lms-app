@@ -2,7 +2,7 @@ import { router } from "expo-router";
 
 import { images } from "@/constants";
 import { setCompany } from "@/core/store/company";
-import { Pressable, Text, View, ImageBackground } from "@/ui";
+import { Pressable, Text, View, Image } from "@/ui";
 
 import type { Company } from "@/types";
 
@@ -28,6 +28,7 @@ export const CompanyCardView = ({ item }: CompanyCardViewProps) => {
         shadowOpacity: 0.27,
         shadowRadius: 4.65,
         elevation: 5,
+        marginBottom: 20,
       }}
     >
       <Pressable onPress={onPress} className="rounded-xl">
@@ -36,36 +37,28 @@ export const CompanyCardView = ({ item }: CompanyCardViewProps) => {
           className={`w-full h-full rounded-xl flex flex-col justify-start items-center p-5`}
         >
           <View className="">
-            <ImageBackground
-              source={item.logo_url! || images.onboarding1}
-              className="rounded-xl w-[48px] h-[48px]"
-              style={{ borderRadius: 12 }}
-              imageStyle={{ borderRadius: 12 }}
-            >
-              <View className="w-[48px] h-[48px] rounded-lg"></View>
-            </ImageBackground>
+            <Image
+              source={item?.logo_url || images.onboarding1}
+              className="rounded-xl"
+              style={{ borderRadius: 12, width: 48, height: 48 }}
+              contentFit="contain"
+            />
           </View>
           <View className="h-[50px] flex flex-col justify-start items-center w-full gap-y-2">
             <View className="flex flex-col items-center">
-              <Text
-                className={`text-black font-black text-xl`}
-                style={{ color: "black" }}
-              >
-                {item?.name!}
+              <Text className={`text-black font-black text-xl`}>
+                {item?.name || "Unknown"}
               </Text>
             </View>
             <View className="flex flex-col items-center">
-              <Text
-                className={`text-black font-bold text-base`}
-                style={{ color: "black" }}
-              >
-                {item?.industry!}
+              <Text className={`text-black font-bold text-base`}>
+                {item?.industry || ""}
               </Text>
               <Text
                 className={`text-black font-bold text-base`}
                 style={{ color: "black" }}
               >
-                {`${item.location!}`}
+                {item?.location || ""}
               </Text>
             </View>
           </View>

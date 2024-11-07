@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   interpolate,
@@ -33,16 +32,12 @@ const Dot = ({
       opacity: opacityAnimation,
     };
   });
-  return <Animated.View style={[styles.dots, animatedDotStyle]} />;
+  return (
+    <Animated.View
+      style={[animatedDotStyle]}
+      className="h-[10px] bg-orange-500 mx-[10px] rounded-[5px]"
+    />
+  );
 };
 
 export default Dot;
-
-const styles = StyleSheet.create({
-  dots: {
-    height: 10,
-    backgroundColor: "orange",
-    marginHorizontal: 10,
-    borderRadius: 5,
-  },
-});

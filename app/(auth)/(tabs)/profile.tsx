@@ -1,7 +1,9 @@
 import { router } from "expo-router";
+import { useColorScheme } from "nativewind";
 
 import { InputField } from "@/components";
 import { images } from "@/constants";
+import { useAuth } from "@/core/auth";
 import { useUser } from "@/core/store/user";
 import {
   SafeAreaView,
@@ -11,19 +13,28 @@ import {
   Button,
   FocusAwareStatusBar,
   Image,
+  Feather,
 } from "@/ui";
 
 const Profile = () => {
-  const user = useUser((state) => state.user);
+  const { colorScheme } = useColorScheme();
+  const { user, removeUser } = useUser();
+  const { isloading: authStatus, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    removeUser();
+    await signOut();
+  };
+
   return (
     <View className="w-full h-full">
       <FocusAwareStatusBar />
       <SafeAreaView className="w-full h-full">
+        <Text className="text-3xl font-bold px-5 my-5">My profile</Text>
         <ScrollView
           className="px-5"
           contentContainerStyle={{ paddingBottom: 120 }}
         >
-          <Text className="text-3xl font-bold my-5">My profile</Text>
           <Button
             onPress={() => router.push("/(auth)/(settings)")}
             variant={"outline"}
@@ -50,22 +61,34 @@ const Profile = () => {
               />
 
               <InputField
-                label="Email"
-                placeholder={user?.email || "johndoe@email.com"}
+                label="Username"
+                placeholder={user?.username || "John Doe"}
                 containerStyle="w-full"
                 inputStyle="p-3.5"
                 editable={false}
               />
 
               <InputField
-                label="Phone"
-                placeholder={"+91-9876543210"}
+                label="Email"
+                placeholder={user?.email || "johndoe@email.com"}
                 containerStyle="w-full"
                 inputStyle="p-3.5"
                 editable={false}
               />
             </View>
           </View>
+          <Button
+            onPress={handleSignOut}
+            variant={"outline"}
+            size="lg"
+            disabled={authStatus}
+          >
+            <Feather
+              name="log-out"
+              size={24}
+              color={colorScheme === "light" ? "black" : "white"}
+            />
+          </Button>
         </ScrollView>
       </SafeAreaView>
     </View>

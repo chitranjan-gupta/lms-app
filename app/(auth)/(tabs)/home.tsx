@@ -1,38 +1,28 @@
 import { useColorScheme } from "nativewind";
 import { useMemo } from "react";
 
-import { Loader, CustomImageCarousel } from "@/components";
-import { useAuth } from "@/core/auth";
+import { Loader, CustomImageCarousel, UserProfile } from "@/components";
 import { useInit } from "@/core/hooks/useInit";
 import { useCompanies } from "@/core/store/company";
 import { useUser } from "@/core/store/user";
 import {
   TouchableOpacity,
   SafeAreaView,
-  Text,
   View,
-  Feather,
   FocusAwareStatusBar,
+  MaterialCommunityIcons,
 } from "@/ui";
 
 const Home = () => {
   const { colorScheme } = useColorScheme();
   const user = useUser((state) => state.user);
-  const removeUser = useUser((state) => state.removeUser);
-  const authStatus = useAuth((state) => state.isloading);
-  const signOut = useAuth((state) => state.signOut);
   const { companies } = useCompanies();
   const { loading } = useInit();
 
-  const customcompanies = useMemo(
-    () => companies.map((company) => ({ ...company, image: company.logo_url })),
+  const companiesToDisplay = useMemo(
+    () => [...companies].slice(0, 5),
     [companies],
   );
-
-  const handleSignOut = async () => {
-    removeUser();
-    await signOut();
-  };
 
   return (
     <View className="w-full h-full">
@@ -46,20 +36,23 @@ const Home = () => {
         <SafeAreaView className="w-full h-full">
           <View className="w-full px-5">
             <View className="w-full flex flex-row items-center justify-between my-5">
-              <Text className="text-2xl font-extrabold">{`Welcome ${user?.name || ""} 👋`}</Text>
+              <UserProfile user={user} />
               <TouchableOpacity
-                onPress={handleSignOut}
                 className={`justify-center items-center w-10 h-10 rounded-full bg-gray-200`}
-                disabled={authStatus}
               >
-                <Feather name="log-out" size={24} color={"black"} />
+                <MaterialCommunityIcons
+                  name="bell-badge"
+                  size={24}
+                  color="black"
+                />
               </TouchableOpacity>
             </View>
           </View>
+          <View></View>
           <CustomImageCarousel
-            data={customcompanies}
-            autoPlay={false}
-            pagination={false}
+            data={companiesToDisplay}
+            autoPlay={true}
+            pagination={true}
           />
         </SafeAreaView>
       )}

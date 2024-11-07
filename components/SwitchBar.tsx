@@ -16,6 +16,7 @@ interface SwitchBarProps {
   style: {};
   duration?: number;
   trackColors?: { on: string; off: string };
+  name: string;
 }
 
 export const SwitchBar = ({
@@ -25,6 +26,7 @@ export const SwitchBar = ({
   style,
   duration = 400,
   trackColors = { on: "lightgray", off: "lightgray" },
+  name,
 }: SwitchBarProps) => {
   const height = useSharedValue(0);
   const width = useSharedValue(0);
@@ -73,14 +75,14 @@ export const SwitchBar = ({
           className="bg-[#0286FF] h-full w-[160px] flex flex-row justify-center items-center z-10"
         >
           <Animated.Text className="text-white text-center">
-            {`${!isActive ? "About" : "Work"} Google`}
+            {`${!isActive ? "About" : "Work"} ${name}`}
           </Animated.Text>
         </Animated.View>
         <Animated.Text className="text-black text-center self-start z-0 -mt-8 ml-10">
-          About Google
+          {`About ${name}`}
         </Animated.Text>
         <Animated.Text className="text-black text-center self-end z-0 -mt-5 mr-10">
-          Work Google
+          {`Work ${name}`}
         </Animated.Text>
       </Animated.View>
     </Pressable>

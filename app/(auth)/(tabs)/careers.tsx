@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
 
 import {
-  FeaturedCompanies,
+  RecentCompanies,
   RecentCareers,
   Loader,
   MockSearchBar,
@@ -14,13 +14,11 @@ import { Pressable, SafeAreaView, Text, View, FocusAwareStatusBar } from "@/ui";
 
 const Careers = () => {
   const { colorScheme } = useColorScheme();
-  const companies = useCompanies((state) => state.companies);
-  const loading = useCompanies((state) => state.status);
-  const careers = useCareers((state) => state.careers);
-  const isPending = useCareers((state) => state.status);
+  const { companies, status: loading } = useCompanies();
+  const { careers, status: isPending } = useCareers();
 
   const handlePress = () => {
-    router.push("/(search)");
+    router.push("/(auth)/(search)/career");
   };
 
   return (
@@ -38,9 +36,12 @@ const Careers = () => {
               <Text className="text-3xl font-extrabold">Find Your Careers</Text>
             </View>
           </View>
-          <MockSearchBar onPress={handlePress} placeholder="Search Your Job" />
+          <MockSearchBar
+            onPress={handlePress}
+            placeholder="Search Your Career"
+          />
           <View className="w-full px-5 flex flex-row items-center justify-between">
-            <Text className="text-2xl font-bold mb-3">Popular Companies</Text>
+            <Text className="text-2xl font-bold mb-3">Recent Companies</Text>
             <View className="flex flex-row">
               <Pressable onPress={() => router.push("/(auth)/(companies)")}>
                 <Text className="text-xs font-bold mb-3 !text-green-500">
@@ -49,8 +50,8 @@ const Careers = () => {
               </Pressable>
             </View>
           </View>
-          <View>
-            <FeaturedCompanies companies={companies} loading={loading} />
+          <View className="w-full h-1/4">
+            <RecentCompanies companies={companies} loading={loading} />
           </View>
           <RecentCareers
             careers={careers}

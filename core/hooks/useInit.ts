@@ -8,20 +8,13 @@ import { useColumns, useRows } from "@/core/store/kanban";
 // import { useUser } from "@/core/store/user";
 
 export const useInit = () => {
-  // const getUser = useUser((state) => state.getUser);
-  // const userStatus = useUser((state) => state.status);
-  const getCourses = useCourses((state) => state.getCourses);
-  const coursesState = useCourses((state) => state.status);
-  const getCategories = useCategories((state) => state.getCategories);
-  const categoriesState = useCategories((state) => state.status);
-  const getCompanies = useCompanies((state) => state.getCompanies);
-  const companiesState = useCompanies((state) => state.status);
-  const getCareers = useCareers((state) => state.getCareers);
-  const careersState = useCareers((state) => state.status);
-  const getColumns = useColumns((state) => state.getColumns);
-  const columnsState = useColumns((state) => state.status);
-  const getRows = useRows((state) => state.getRows);
-  const rowsState = useRows((state) => state.status);
+  // const { getUser, status: userStatus } = useUser();
+  const { getCourses, status: coursesState } = useCourses();
+  const { getCategories, status: categoriesState } = useCategories();
+  const { getCompanies, status: companiesState } = useCompanies();
+  const { getCareers, status: careersState } = useCareers();
+  const { getColumns, status: columnsState } = useColumns();
+  const { getRows, status: rowsState } = useRows();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
