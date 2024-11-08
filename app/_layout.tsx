@@ -6,7 +6,6 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import FlashMessage from "react-native-flash-message";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { APIProvider } from "@/api/common/api-provider";
@@ -56,7 +55,10 @@ export default function RootLayout() {
                   name="(unauth)"
                   options={{ headerShown: false }}
                 />
-                <Stack.Screen name="+not-found" />
+                <Stack.Screen
+                  name="+not-found"
+                  options={{ headerShown: false }}
+                />
               </Stack>
             </BottomSheetModalProvider>
           </APIProvider>

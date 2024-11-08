@@ -6,7 +6,7 @@ import { useFirstTime } from "@/core/store/use-first";
 import { View } from "@/ui";
 
 const Onboarding = () => {
-  const setStatus = useFirstTime((state) => state.setStatus);
+  const { setStatus } = useFirstTime();
 
   const onPress = () => {
     setStatus("no");

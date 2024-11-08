@@ -1,6 +1,6 @@
 import { Link, router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import FlashMessage, { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
 
 import { CustomButton, InputField, OTPModal, SuccessModal } from "@/components";
 import { images } from "@/constants";
@@ -20,10 +20,7 @@ import type { SignUpForm, Verification } from "@/types";
 
 const SignUp = () => {
   const flashRef = useRef<FlashMessage>(null);
-  const user = useUser((state) => state.user);
-  const error = useUser((state) => state.error);
-  const setUser = useUser((state) => state.setUser);
-  const userStatus = useUser((state) => state.status);
+  const { user, error, setUser, status: userStatus } = useUser();
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [isChecked, setChecked] = useState(false);
   const [isEye, setIsEye] = useState(true);
@@ -55,7 +52,7 @@ const SignUp = () => {
       ) {
         setUser(form);
       } else {
-        showMessage({
+        flashRef.current?.showMessage({
           message:
             "Name, Username should be greater than 3 and Email & Password length should be greater than 4",
           type: "danger",

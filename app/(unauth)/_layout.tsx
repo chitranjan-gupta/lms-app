@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useAuth } from "@/core/auth";
 
 const Layout = () => {
-  const status = useAuth((state) => state.status);
+  const { status } = useAuth();
+
   useEffect(() => {
     if (status === "signIn") {
       router.replace("/(auth)/(tabs)/home");

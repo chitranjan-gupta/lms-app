@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { useRef, useState } from "react";
-import FlashMessage, { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
 
 import { CustomButton, InputField } from "@/components";
 import { images } from "@/constants";
@@ -18,9 +18,7 @@ import {
 
 const SignIn = () => {
   const flashRef = useRef<FlashMessage>(null);
-  const error = useAuth((state) => state.error);
-  const signIn = useAuth((state) => state.signIn);
-  const isloading = useAuth((state) => state.isloading);
+  const { error, signIn, isloading } = useAuth();
   const [isChecked, setChecked] = useState(false);
   const [isEye, setIsEye] = useState(true);
   const [form, setForm] = useState({
@@ -33,7 +31,7 @@ const SignIn = () => {
       if (form.email.length > 5 && form.password.length > 5) {
         await signIn(form);
       } else {
-        showMessage({
+        flashRef.current?.showMessage({
           message: "Email & Password length should be greater than 5",
           type: "danger",
         });

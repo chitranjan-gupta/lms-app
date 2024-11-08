@@ -6,9 +6,9 @@ import { useFirstTime } from "@/core/store/use-first";
 import { useUser } from "@/core/store/user";
 
 const Layout = () => {
-  const getUser = useUser((state) => state.getUser);
-  const authStatus = useAuth((state) => state.status);
-  const isFirstTime = useFirstTime((state) => state.status);
+  const { getUser } = useUser();
+  const { status: authStatus } = useAuth();
+  const { status: isFirstTime } = useFirstTime();
 
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
