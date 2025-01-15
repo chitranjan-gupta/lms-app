@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { client } from "@/api/common/client";
+import { fetchCategories } from "@/api";
 
 import type { Category } from "@/types";
 
@@ -22,8 +22,10 @@ export const useCategories = create<CategoriesState>()(
     },
     getCategories: async () => {
       set({ status: "pending" });
-      const response = await client.get(`categories`);
-      set({ status: "idle", categories: response.data });
+      const data = await fetchCategories();
+      if (data) {
+        set({ status: "idle", categories: data });
+      }
     },
     hydrate: async () => {
       try {

@@ -11,7 +11,7 @@ import type { ReactNode } from "react";
 
 interface FlipCardProps {
   isFlipped: any;
-  cardStyle: {};
+  cardStyle: object;
   direction?: string;
   duration?: number;
   RegularContent: ReactNode;

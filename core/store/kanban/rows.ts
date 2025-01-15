@@ -17,7 +17,7 @@ interface Row {
   career: Career;
 }
 
-interface InputRow extends Omit<Row, "columnId" | "position"> {}
+type InputRow = Omit<Row, "columnId" | "position">;
 
 interface RowsState {
   status: "idle" | "pending";

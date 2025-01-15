@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import React from "react";
 import { Share, Dimensions } from "react-native";
 
 import { BackButton, CustomButton, ExternalLink, Loader } from "@/components";

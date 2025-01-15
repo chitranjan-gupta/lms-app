@@ -1,3 +1,5 @@
+import React from "react";
+
 import { View, Text } from "@/ui";
 
 import type { TxKeyPath } from "@/core/i18n";

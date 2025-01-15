@@ -1,4 +1,5 @@
 import { useColorScheme } from "nativewind";
+import React from "react";
 
 import { images } from "@/constants";
 import { Text, View, Image } from "@/ui";

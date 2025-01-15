@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { client } from "@/api/common/client";
+import { fetchCourses } from "@/api";
 
 import type { Course } from "@/types";
 
@@ -22,8 +22,10 @@ export const useCourses = create<CoursesState>()(
     },
     getCourses: async () => {
       set({ status: "pending" });
-      const response = await client.get(`courses`);
-      set({ status: "idle", courses: response.data });
+      const data = await fetchCourses();
+      if (data) {
+        set({ status: "idle", courses: data });
+      }
     },
     hydrate: async () => {
       try {

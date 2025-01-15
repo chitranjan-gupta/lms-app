@@ -5,6 +5,7 @@ import {
   forwardRef,
   Ref,
 } from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -55,7 +56,7 @@ export interface ToastRef {
   }) => void;
 }
 
-interface ToastProps {}
+type ToastProps = object;
 
 /**
  *

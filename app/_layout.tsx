@@ -7,15 +7,21 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { vexo } from "vexo-analytics";
 
 import { APIProvider } from "@/api/common/api-provider";
 import { AnimatedAppLoader } from "@/components/SplashScreen";
+import { VEXO_API_KEY } from "@/constants";
 import { hydrateAuth } from "@/core/auth";
 import { loadSelectedTheme } from "@/core/hooks/use-selected-theme";
 import { useThemeConfig } from "@/core/hooks/use-theme-config";
 import { hydrateFirstTime } from "@/core/store/use-first";
 import "@/core/i18n";
 import "react-native-reanimated";
+
+if (!__DEV__) {
+  vexo(VEXO_API_KEY);
+}
 
 loadSelectedTheme();
 hydrateFirstTime();

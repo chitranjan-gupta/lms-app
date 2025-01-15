@@ -11,7 +11,7 @@ import ThemeIcon from "../ThemeIcon";
 
 import Switch from "./ThemeSwitch";
 
-interface ThemeModalProps {}
+type ThemeModalProps = object;
 
 const ThemeModalComponent = (
   props: ThemeModalProps,

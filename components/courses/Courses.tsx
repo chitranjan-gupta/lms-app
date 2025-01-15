@@ -15,11 +15,11 @@ interface FeaturedCoursesProps {
 export const FeaturedCourses = ({ courses, loading }: FeaturedCoursesProps) => {
   return (
     <List
+      className="w-full h-full"
       data={courses}
       renderItem={({ item, index }) => <CourseCardView item={item} />}
       contentContainerStyle={{
         paddingHorizontal: 16,
-        paddingBottom: 16,
       }}
       keyExtractor={(item, index) => index.toString()}
       keyboardShouldPersistTaps="handled"

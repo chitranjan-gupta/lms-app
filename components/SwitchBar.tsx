@@ -13,7 +13,7 @@ interface SwitchBarProps {
   value: SharedValue<boolean>;
   isActive: boolean;
   onPress: () => void;
-  style: {};
+  style: object;
   duration?: number;
   trackColors?: { on: string; off: string };
   name: string;

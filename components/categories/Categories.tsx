@@ -14,6 +14,7 @@ interface CategoriesProps {
 export const Categories = ({ categories, loading }: CategoriesProps) => {
   return (
     <List
+      className="w-full h-full"
       data={categories}
       renderItem={({ item, index }) => (
         <CategoryCard item={item} index={index} />

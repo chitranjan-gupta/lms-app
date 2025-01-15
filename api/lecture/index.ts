@@ -1,24 +1,18 @@
-import { createMutation } from "react-query-kit";
+import { client } from "../common/client";
 
-import { client } from "@/api/common/client";
-
-import type { AxiosError } from "axios";
-
-type Variables = {
-  lectureId: string;
-  chapterId: string;
-  courseId: string;
+export const fetchLecture = async (
+  lectureId: string,
+  chapterId: string,
+  courseId: string,
+  purchase: boolean,
+  userId: string,
+) => {
+  const response = await client.post(`courses/user/lecture`, {
+    lectureId: lectureId,
+    chapterId: chapterId,
+    courseId: courseId,
+    purchase: purchase,
+    userId: userId,
+  });
+  return response.data;
 };
-
-export const useLecture = createMutation<Response, Variables, AxiosError>({
-  mutationFn: async (variables) => {
-    const response = await client.post(`courses/user/lecture`, {
-      lectureId: variables.lectureId,
-      chapterId: variables.chapterId,
-      courseId: variables.courseId,
-      purchase: true,
-      userId: "",
-    });
-    return response.data;
-  },
-});

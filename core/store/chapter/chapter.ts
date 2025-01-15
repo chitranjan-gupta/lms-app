@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { client } from "@/api/common/client";
+import { fetchChapter } from "@/api";
 import { Chapter } from "@/types";
 
 interface ChapterState {
@@ -29,9 +29,9 @@ export const useChapter = create<ChapterState>()(
     getChapter: async () => {
       try {
         set({ status: "pending" });
-        const response = await client.get(`chapters/${get().chapterid}`);
-        if (response.status === 200) {
-          set({ status: "idle", chapter: response.data });
+        const data = await fetchChapter(get().chapterid!);
+        if (data) {
+          set({ status: "idle", chapter: data });
         }
       } catch (e) {
         console.log(e);

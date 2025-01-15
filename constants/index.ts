@@ -5,6 +5,7 @@ import noResult from "@/assets/images/no-result.png";
 import onboarding1 from "@/assets/images/onboarding1.png";
 import onboarding2 from "@/assets/images/onboarding2.png";
 import onboarding3 from "@/assets/images/onboarding3.png";
+import { Env } from "@/core/env";
 
 import type { Onboarding } from "@/types";
 
@@ -56,13 +57,12 @@ export const data = {
   onboarding,
 };
 
-export const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+export const BASE_URL = Env.API_URL;
 export const muxStreamBaseUrl = "https://stream.mux.com";
 export const videoExtension = "m3u8";
-export const STRIPE_PUBLISHABLE_KEY =
-  process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+export const STRIPE_PUBLISHABLE_KEY = Env.STRIPE_PUBLISHABLE_KEY;
 
 export const snapPoints = ["50%", "70%", "100%"];
-export const merchantIdentifier =
-  process.env.EXPO_PUBLIC_STRIPE_MERCHANT_IDENTIFIER;
-export const urlScheme = process.env.EXPO_PUBLIC_URL_SCHEME;
+export const merchantIdentifier = Env.STRIPE_MERCHANT_IDENTIFIER;
+export const urlScheme = Env.STRIPE_URL_SCHEME;
+export const VEXO_API_KEY = Env.VEXO_API_KEY;

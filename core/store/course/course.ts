@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-import { client } from "@/api/common/client";
+import { fetchCourse } from "@/api";
 import { Course } from "@/types";
 
 interface FetchState {
@@ -33,9 +33,9 @@ export const useCourse = create<CourseState>()(
     getCourse: async () => {
       try {
         set({ status: "pending" });
-        const response = await client.get(`courses/${get().courseid}`);
-        if (response.status === 200) {
-          set({ status: "idle", course: response.data });
+        const data = await fetchCourse(get().courseid!);
+        if (data) {
+          set({ status: "idle", course: data });
         }
       } catch (e) {
         console.log(e);

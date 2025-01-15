@@ -7,6 +7,13 @@ import type {
   ImageSourcePropType,
 } from "react-native";
 
+declare type PaginateQuery<T> = {
+  results: T[];
+  count: number;
+  next: string | null;
+  previous: string | null;
+};
+
 declare interface Onboarding {
   id: number;
   animation?: AnimationObject;
@@ -71,6 +78,7 @@ declare interface TabBarProps {
     | "entypo"
     | "image";
   source?: ImageSourcePropType;
+  size: number;
 }
 
 declare interface User {
@@ -301,5 +309,4 @@ declare interface KanbanRow
   columnId: string;
 }
 
-declare interface KanbanColumn
-  extends Omit<Kanban_Column, "id" | "kanbanRow" | "position"> {}
+type KanbanColumn = Omit<Kanban_Column, "id" | "kanbanRow" | "position">;

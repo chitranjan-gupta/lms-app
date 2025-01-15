@@ -16,14 +16,15 @@ export function TabBarIcon({
   color,
   icontype,
   source,
+  size,
 }: TabBarProps) {
-  const renderIcon = () => {
+  const renderIcon = (size: number) => {
     if (icontype === "ionicons" && name in Ionicons.glyphMap) {
       return (
         <Ionicons
           name={name as keyof typeof Ionicons.glyphMap}
           color={color}
-          size={24}
+          size={size}
         />
       );
     } else if (icontype === "fontawesome" && name in FontAwesome.glyphMap) {
@@ -31,7 +32,7 @@ export function TabBarIcon({
         <FontAwesome
           name={name as keyof typeof FontAwesome.glyphMap}
           color={color}
-          size={24}
+          size={size}
         />
       );
     } else if (icontype === "feather" && name in Feather.glyphMap) {
@@ -39,7 +40,7 @@ export function TabBarIcon({
         <Feather
           name={name as keyof typeof Feather.glyphMap}
           color={color}
-          size={24}
+          size={size}
         />
       );
     } else if (icontype === "materialicons" && name in MaterialIcons.glyphMap) {
@@ -47,7 +48,7 @@ export function TabBarIcon({
         <MaterialIcons
           name={name as keyof typeof MaterialIcons.glyphMap}
           color={color}
-          size={24}
+          size={size}
         />
       );
     } else if (icontype === "entypo" && name in Entypo.glyphMap) {
@@ -55,7 +56,7 @@ export function TabBarIcon({
         <Entypo
           name={name as keyof typeof Entypo.glyphMap}
           color={color}
-          size={24}
+          size={size}
         />
       );
     } else if (icontype === "image" && source) {
@@ -73,12 +74,12 @@ export function TabBarIcon({
 
   return (
     <View
-      className={`flex flex-row justify-center items-center rounded-full ${focused ? "bg-blue-300" : ""}`}
+      className={`flex flex-row justify-center items-center rounded-full w-12 h-12 ${focused ? "bg-blue-300" : ""}`}
     >
       <View
         className={`rounded-full w-12 h-12 items-center justify-center ${focused ? "bg-blue-400" : ""}`}
       >
-        {renderIcon()}
+        {renderIcon(size)}
       </View>
     </View>
   );

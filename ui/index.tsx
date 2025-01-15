@@ -1,5 +1,3 @@
-import Swiper from "react-native-swiper";
-export { Swiper };
 export {
   View,
   Pressable,
@@ -10,7 +8,10 @@ export {
   ActivityIndicator,
   Alert,
 } from "react-native";
-export { SafeAreaView } from "react-native-safe-area-context";
+export {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 export { ImageBackground, Image } from "expo-image";
 export * from "./text";
 export * from "./button";

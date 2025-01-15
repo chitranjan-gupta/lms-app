@@ -29,6 +29,10 @@ export default function Layout() {
           flexDirection: "row",
           position: "absolute",
         },
+        tabBarIconStyle: {
+          width: 0,
+          height: 0,
+        },
       }}
     >
       <Tabs.Screen
@@ -36,12 +40,13 @@ export default function Layout() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <TabBarIcon
               name="home"
               focused={focused}
               color={color}
               icontype={"entypo"}
+              size={size}
             />
           ),
         }}
@@ -51,12 +56,13 @@ export default function Layout() {
         options={{
           title: "Courses",
           headerShown: false,
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <TabBarIcon
               name="book"
               focused={focused}
               color={color}
               icontype={"feather"}
+              size={size}
             />
           ),
         }}
@@ -66,12 +72,13 @@ export default function Layout() {
         options={{
           title: "Careers",
           headerShown: false,
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <TabBarIcon
               name="suitcase"
               focused={focused}
               color={color}
               icontype={"fontawesome"}
+              size={size}
             />
           ),
         }}
@@ -81,12 +88,13 @@ export default function Layout() {
         options={{
           title: "Kanban",
           headerShown: false,
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <TabBarIcon
               name="view-kanban"
               focused={focused}
               color={color}
               icontype={"materialicons"}
+              size={size}
             />
           ),
         }}
@@ -96,12 +104,13 @@ export default function Layout() {
         options={{
           title: "Profile",
           headerShown: false,
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <TabBarIcon
               name="user-circle"
               focused={focused}
               color={color}
               icontype={"fontawesome"}
+              size={size}
             />
           ),
         }}

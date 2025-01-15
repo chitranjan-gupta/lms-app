@@ -9,8 +9,8 @@ import {
   Loader,
   MockSearchBar,
 } from "@/components";
-import { useCategories } from "@/core/store/categories";
-import { useCourses } from "@/core/store/courses";
+import { useCategories } from "@/core/store/category";
+import { useCourses } from "@/core/store/course";
 import {
   Pressable,
   SafeAreaView,
@@ -52,13 +52,13 @@ const Courses = () => {
             onPress={handlePress}
             placeholder="Search Your Course"
           />
-          <View className="w-full px-5 flex flex-row items-center justify-between">
+          <View className="w-full px-5 flex flex-row items-center justify-between mb-2">
             <Text className="text-2xl font-bold">Popular Courses</Text>
             <Pressable>
               <Text className="text-xs font-bold text-green-500">See all</Text>
             </Pressable>
           </View>
-          <View className="py-4">
+          <View className="w-full h-60">
             <FeaturedCourses courses={courses} loading={loading} />
           </View>
           <View className="w-full px-5 py-1 flex flex-row items-center justify-between">
@@ -75,7 +75,9 @@ const Courses = () => {
               />
             </Pressable>
           </View>
-          <Categories categories={categories} loading={isPending} />
+          <View className="w-full h-20">
+            <Categories categories={categories} loading={isPending} />
+          </View>
           <View className="w-full px-5 flex flex-row items-center justify-between">
             <Text className="text-2xl font-bold mb-3">Recent Courses</Text>
             <View className="flex flex-row">

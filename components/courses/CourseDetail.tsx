@@ -4,7 +4,7 @@ import {
   useBridgeState,
 } from "@10play/tentap-editor";
 import { useColorScheme } from "nativewind";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { images } from "@/constants";
 import { Text, View, ImageBackground } from "@/ui";

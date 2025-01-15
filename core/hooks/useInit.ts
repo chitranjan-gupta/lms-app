@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { useCareers } from "@/core/store/career";
-import { useCategories } from "@/core/store/categories";
+import { useCategories } from "@/core/store/category";
 import { useCompanies } from "@/core/store/company";
-import { useCourses } from "@/core/store/courses";
+import { useCourses } from "@/core/store/course";
 import { useColumns, useRows } from "@/core/store/kanban";
+
 // import { useUser } from "@/core/store/user";
 
 export const useInit = () => {

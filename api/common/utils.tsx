@@ -1,4 +1,4 @@
-import type { PaginateQuery } from "@/api/types";
+import type { PaginateQuery } from "@/types";
 import type {
   GetNextPageParamFunction,
   GetPreviousPageParamFunction,

@@ -2,7 +2,7 @@ import { Text, View, BottomSheetTextInput } from "@/ui";
 
 import type { InputFieldProps } from "@/types";
 
-interface InputBoxProps extends InputFieldProps {}
+type InputBoxProps = InputFieldProps;
 
 export const InputBox = ({
   label,

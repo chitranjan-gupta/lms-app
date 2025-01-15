@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import React from "react";
 
 import { setChapter } from "@/core/store/chapter";
 import { setLecture, useLecture } from "@/core/store/lecture";

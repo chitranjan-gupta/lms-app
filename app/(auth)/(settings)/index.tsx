@@ -14,12 +14,13 @@ import {
 import {
   ScrollView,
   View,
-  SafeAreaView,
   FocusAwareStatusBar,
   Text,
+  useSafeAreaInsets,
 } from "@/ui";
 
 export default function Settings() {
+  const insets = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
   const backgroundColorAnimation = useAnimatedStyle(() => {
     return {
@@ -31,7 +32,7 @@ export default function Settings() {
   return (
     <Animated.View style={[backgroundColorAnimation]} className="w-full h-full">
       <FocusAwareStatusBar />
-      <SafeAreaView>
+      <View style={{ paddingTop: insets.top }}>
         <View className="p-2">
           <BackButton />
         </View>
@@ -45,7 +46,7 @@ export default function Settings() {
           </View>
           {/* <Notification /> */}
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </Animated.View>
   );
 }

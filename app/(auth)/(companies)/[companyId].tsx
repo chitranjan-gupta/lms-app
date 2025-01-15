@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
+import React from "react";
 import { useSharedValue } from "react-native-reanimated";
 
 import {
