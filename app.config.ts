@@ -123,9 +123,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
   ],
-  runtimeVersion: {
-    policy: "appVersion",
-  },
+  runtimeVersion: Env.VERSION,
   extra: {
     ...ClientEnv,
     eas: {
