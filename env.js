@@ -87,7 +87,7 @@ const buildTime = z.object({
   EAS_UPDATE_URL: z.string(),
 
   // ADD YOUR BUILD TIME ENV VARS HERE
-  // GOOGLE_SERVICES_JSON: z.string(),
+  GOOGLE_SERVICES_JSON: z.string(),
 });
 
 /**
@@ -122,7 +122,7 @@ const _buildTimeEnv = {
   EAS_UPDATE_URL: process.env.EAS_UPDATE_URL,
 
   // ADD YOUR ENV VARS HERE TOO
-  // GOOGLE_SERVICES_JSON: process.env.GOOGLE_SERVICES_JSON,
+  GOOGLE_SERVICES_JSON: process.env.GOOGLE_SERVICES_JSON,
 };
 
 /**

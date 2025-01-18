@@ -52,10 +52,14 @@ jobs:
           envkey_EXPO_ACCOUNT_OWNER: ""
           envkey_EAS_UPDATE_URL: ""
           envkey_SCHEME: ""
+          envkey_GOOGLE_SERVICES_JSON: ""
           file_name: .env.production
 
       - name: Fetch Environment Variables
         run: APP_ENV=production eas env:pull production
+
+      - name: Update Environment Variables
+        run : cat .env.local > .env.production
 
       - name: Build on Android App
         run: APP_ENV=production eas build --platform android --profile production --local --output ${{ github.workspace }}/app-release.apk

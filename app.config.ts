@@ -53,7 +53,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "android.permission.RECORD_AUDIO",
       "android.permission.MODIFY_AUDIO_SETTINGS",
     ],
-    googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
+    googleServicesFile: Env.GOOGLE_SERVICES_JSON,
   },
   plugins: [
     "expo-router",
