@@ -34,6 +34,29 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_DEBUG: false
+          envkey_NAME: ${{ secrets.APP_NAME }}
+          envkey_SLUG: ${{ secrets.APP_SLUG }}
+          envkey_EAS_PROJECT_ID: ${{ secrets.APP_EAS_PROJECT_ID }}
+          envkey_API_URL: ""
+          envkey_STRIPE_PUBLISHABLE_KEY: ""
+          envkey_STRIPE_MERCHANT_IDENTIFIER: ""
+          envkey_STRIPE_URL_SCHEME: ""
+          envkey_VEXO_API_KEY: ""
+          envkey_BUNDLE_ID: ""
+          envkey_PACKAGE: ""
+          envkey_DESCRIPTION: ""
+          envkey_EXPO_ACCOUNT_OWNER: ""
+          envkey_EAS_UPDATE_URL: ""
+          envkey_SCHEME: ""
+          file_name: .env.production
+
+      - name: Fetch Environment Variables
+        run: APP_ENV=production eas env:pull production
+
       - name: Build on Android App
         run: APP_ENV=production eas build --platform android --profile production --local --output ${{ github.workspace }}/app-release.apk
 
