@@ -10,7 +10,8 @@
       "distribution": "internal",
       "channel": "development",
       "android": {
-        "resourceClass": "medium"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
       }
     },
     "preview": {
