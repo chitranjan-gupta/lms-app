@@ -97,12 +97,10 @@ const _clientEnv = {
   APP_ENV,
   NAME: process.env.NAME,
   SCHEME: process.env.SCHEME,
-  BUNDLE_ID: process.env.BUNDLE_ID,
-  PACKAGE: process.env.PACKAGE,
+  BUNDLE_ID: withEnvSuffix(process.env.BUNDLE_ID),
+  PACKAGE: withEnvSuffix(process.env.PACKAGE),
   SLUG: process.env.SLUG,
   DESCRIPTION: process.env.DESCRIPTION,
-  // BUNDLE_ID: withEnvSuffix(BUNDLE_ID),
-  // PACKAGE: withEnvSuffix(PACKAGE),
   VERSION: packageJSON.version,
 
   // ADD YOUR ENV VARS HERE TOO

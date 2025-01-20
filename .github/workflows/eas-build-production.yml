@@ -1,9 +1,9 @@
-name: EAS Build
+name: EAS Build production
 on:
   workflow_dispatch:
 jobs:
   build:
-    name: Install and build
+    name: Install and build Android app
     runs-on: ubuntu-latest
     steps:
       - name: Setup repository
@@ -61,7 +61,7 @@ jobs:
       - name: Update Environment Variables
         run : cat .env.local > .env.production
 
-      - name: Build on Android App
+      - name: Build Android App
         run: APP_ENV=production eas build --platform android --profile production --local --output ${{ github.workspace }}/app-release.apk
 
       - name: Upload APK artifact
