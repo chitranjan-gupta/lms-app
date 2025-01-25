@@ -20,7 +20,10 @@ expo-env.d.ts
 # @end expo-cli
 
 # env
-.env.local
+.env.*
 
-#google
+# google
 google-services.json
+
+# eas
+.eas
